@@ -1,0 +1,8 @@
+Create ruby daemon to manage MPD:
+  * Load Radio 4 playlist
+  * Start playing
+  * Play a different track in response to stimuli:
+    - HTTP Request?
+    - A touched file?
+    - After X Seconds?
+ 
