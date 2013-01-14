@@ -9,9 +9,8 @@ class MPD
   end
 
   def connect
-    @connect = Net::Telnet::new("Host" => @host, "Port" => @port, "Prompt" => //, "Mach" => /^OK$/)
-    # currently here just to flush MPD info on connect
-    cmd('status')
+    @connect = Net::Telnet::new("Host" => @host, "Port" => @port, "Prompt" => //)
+    @connect.waitfor("Match" => /^OK MPD \d{1,2}\.\d{1,2}\.\d{1,2}$/)
     @connect
   end
 
