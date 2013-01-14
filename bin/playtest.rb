@@ -3,4 +3,6 @@ require_relative '../lib/mpd'
 
 @mpd = MPD.new
 @mpd.connect
-@mpd.radio_1
+@mpd.playlist ARGV[0] || "bbc_radio_4"
+@mpd.disconnect
+
