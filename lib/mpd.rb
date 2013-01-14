@@ -12,15 +12,15 @@ class MPD
 
   def radio_1
     return false unless @connect
-    @connect.cmd("status") {|c| print 'status: '+c}
+    @connect.cmd("String" => "status", "Match" => /^OK$/) {|c| print 'status: '+c}
     puts 'stop'
-    @connect.cmd("stop") {|c| print 'stop: '+c}
+    @connect.cmd("String" => "stop", "Match" => /^OK$/) {|c| print 'stop: '+c}
     puts 'clear'
-    @connect.cmd("clear") {|c| print 'clear: '+c}
+    @connect.cmd("String" => "clear", "Match" => /^OK$/) {|c| print 'clear: '+c}
     puts 'load'
-    @connect.cmd("load bbc_radio_1") {|c| print 'load: '+c}
+    @connect.cmd("String" => "load bbc_radio_1", "Match" => /^OK$/) {|c| print 'load: '+c}
     puts 'play'
-    @connect.cmd("play") {|c| print 'play: '+c}
+    @connect.cmd("String" => "play", "Match" => /^OK$/) {|c| print 'play: '+c}
     @connect.close
   end
 end
