@@ -30,6 +30,16 @@ class MPD
     end
   end
 
+  def enqueue(playlist)
+    response = cmd("load #{playlist}", "Match" => /(OK|No such playlist)/)
+    response == 'OK'
+  end
+
+  def play(song_number=nil)
+    response = cmd("play #{song_number}")
+    response == 'OK'
+  end
+
   private
   def method_missing(method, *args, &block)
     if COMMANDS.include?(method.to_s)
@@ -37,15 +47,6 @@ class MPD
     else
       super
     end
-  end
-
-  def enqueue(playlist)
-    cmd("load #{playlist}", "Match" => /(OK|playlist)/)
-  end
-
-  def play(song_number=nil)
-    response = cmd("play #{song_number}")
-    response == 'OK'
   end
 
   def cmd(command, options={})
