@@ -11,3 +11,10 @@ gem 'em-http-request'
 
 gem 'activesupport'
 gem 'foreman'
+
+group 'web' do
+  gem 'faye'
+  gem 'thin'
+  gem 'sinatra'
+end
+

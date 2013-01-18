@@ -12,33 +12,21 @@ ROOT = File.join(File.dirname(__FILE__), '..')
 
 @config = YAML.load_file(File.join(ROOT, 'config.yml'))
 
-require_relative '../lib/radio-playlist'
+require_relative '../lib/em_additions'
+require_relative '../lib/radio_playlist'
 require_relative '../lib/mpd'
 require_relative '../lib/control'
-
-def now_and_every(period, &blk)
-  yield
-  
-  seconds = case
-    when period.include?(:hours)
-      period[:hours]*60*60
-    when period.include?(:minutes)
-      period[:minutes]*60
-    else
-      period[:seconds]
-  end
-  
-  EM::Synchrony.add_periodic_timer(seconds) do
-    yield
-  end
-end
+require_relative '../lib/web_app'
 
 EM.synchrony do
   @playlists = RadioPlaylist.new(path: File.join(ROOT, 'playlists'))
   
   @mpd = MPD.new(@config)
   @mpd.playlists = @playlists
-
+  
+  # start web interface
+  Thin::Server.start WebApp, '0.0.0.0', 3000
+  
   # graceful shutdown of service
   # also stops MPD
   %w{INT SIGTERM}.each do |signal|
@@ -58,14 +46,14 @@ EM.synchrony do
   EM::Synchrony.next_tick do
     # download BBC Radio playlists
     # Querystrings suggest each stream valid for 4 hours
-    now_and_every(hours: 3.9) do
+    EM.now_and_every(hours: 3.9) do
       @playlists.download
     end
   end
 
   EM::Synchrony.next_tick do
     # keep MPD running on schedule
-    now_and_every(seconds: 1) do
+    EM.now_and_every(seconds: 1) do
       @mpd.sync
     end
   end
@@ -73,7 +61,7 @@ EM.synchrony do
   EM::Synchrony.next_tick do
     # check for touched files
     @file_control = Control::File.new(@mpd)
-    now_and_every(seconds: 0.5) do
+    EM.now_and_every(seconds: 0.5) do
       @file_control.check
     end
   end
