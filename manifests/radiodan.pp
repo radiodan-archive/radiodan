@@ -16,6 +16,7 @@ package { 'bundler':
 package { "vim": } 
 package { "screen": } 
 
+package { "build-essential": } 
 package { "mpd": } 
 package { "mpc": } 
 package { "ncmpcpp": } 
