@@ -1,6 +1,4 @@
-require "em-synchrony"
 require "em-synchrony/em-http"
-
 
 class RadioPlaylist
   URL = "http://www.bbc.co.uk/radio/listen/live/r%s_aaclca.pls"
@@ -12,16 +10,19 @@ class RadioPlaylist
   end
   
   def download
+    print 'downloading...'
     STATIONS.each do |station|
-      req = EM::HttpRequest.new(URL % station).aget
-      req.callback do
-        url = req.response.match(/^File1=(.*)$/)[1]
-        
-        if url != @playlists[station]
-          @playlists[station] = url
-          File.open("#{@path}/bbc_radio_#{station}.m3u", 'w'){ |f| f.write("#{url}\n") }
-        end
+      req = EM::HttpRequest.new(URL % station).get
+      return false if req.response_header.status != 200
+      
+      url = req.response.match(/^File1=(.*)$/)[1]
+      print " #{station}"
+      
+      if url != @playlists[station]
+        @playlists[station] = url
+        File.open("#{@path}/bbc_radio_#{station}.m3u", 'w'){ |f| f.write("#{url}\n") }
       end
     end
+    puts '...doneloading'
   end
 end

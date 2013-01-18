@@ -1,4 +1,4 @@
-require 'net/telnet'
+require 'em-simple_telnet'
 
 class MPD
   COMMANDS = %w{stop pause status clear}
@@ -6,17 +6,6 @@ class MPD
   def initialize(options={})
     @port = options[:port] || 6600
     @host = options[:host] || 'localhost'
-  end
-
-  def connect
-    @connect = Net::Telnet::new("Host" => @host, "Port" => @port, "Prompt" => //)
-    @connect.waitfor("Match" => /^OK MPD \d{1,2}\.\d{1,2}\.\d{1,2}$/)
-    @connect
-  end
-
-  def disconnect
-    return true unless @connect
-    @connect.close
   end
 
   def playlist(playlist)
@@ -49,14 +38,22 @@ class MPD
   end
 
   def cmd(command, options={})
-    connect unless @connect
-    options = {"String" => command, "Match" => /^OK$/}.merge(options)
+    options = {match: /^OK$/}.merge(options)
+    response = false
     
-    if block_given?
-      @connect.cmd(options) { |p| yield(p) }
-    else
-      @connect.cmd(options).chomp
+    connect do |c|
+      puts "MPD: #{command}"
+      response = c.cmd(command, options).strip
+    end
+    
+    response
+  end
+  
+  private
+  def connect(&blk)
+    EM::P::SimpleTelnet.new(host: @host, port: @port, prompt: /^OK$/) do |host|
+      host.waitfor(/^OK MPD \d{1,2}\.\d{1,2}\.\d{1,2}$/)
+      yield(host)
     end
   end
 end
-

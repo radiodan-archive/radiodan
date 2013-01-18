@@ -1,15 +1,46 @@
 #!/usr/bin/env ruby
 require 'eventmachine'
-require_relative '../lib/radio-playlist'
+require 'em-synchrony'
+require 'pathname'
 
-EM.run do
-  # download BBC Radio playlists
-  playlists = File.join(File.dirname(__FILE__), '..', 'playlists')
-  r = RadioPlaylist.new(path: playlists)
-  EM.add_periodic_timer(2) do
-    r.download
+require_relative '../lib/radio-playlist'
+require_relative '../lib/mpd'
+
+ROOT = File.join(File.dirname(__FILE__), '..')
+
+EM.synchrony do
+  @mpd = MPD.new
+
+  EM.error_handler do |e|
+    puts "Error raised during event loop: #{e.message}"
+    puts e.backtrace.join("\n")
   end
   
-  # connect to MPD
-  
+  EM::Synchrony.next_tick do
+    # download BBC Radio playlists
+    playlists = File.join(ROOT, 'playlists')
+    r = RadioPlaylist.new(path: playlists)
+    r.download
+
+    EM::Synchrony.add_periodic_timer(30) do
+      r.download
+    end
+  end
+
+  EM::Synchrony.next_tick do
+    # connect to MPD
+    @mpd.playlist "bbc_radio_4"
+  end
+
+  EM::Synchrony.next_tick do
+    # check for stop file
+    stop_file = File.join(ROOT, 'tmp', 'stop')
+    EM::Synchrony.add_periodic_timer(0.5) do
+      p = Pathname.new(stop_file)
+      if p.exist?
+        p.delete
+        @mpd.stop
+      end
+    end
+  end
 end
