@@ -21,16 +21,10 @@ package { "mpd": }
 package { "mpc": } 
 package { "ncmpcpp": } 
 package { "alsa-utils": } 
-package { "curl": } 
 
 service { "mpd":
   ensure => "running",
   require => Package['mpd'],
-}
-
-exec { "radio-playlists":
-  command => "/vagrant/bin/radio-playlists.sh",
-  require => Package['curl'],
 }
 
 exec { "umute":
