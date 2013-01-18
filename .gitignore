@@ -17,7 +17,7 @@ tmp
 _yardoc
 doc/
 .vagrant
+
 music/*.mp3
-
 playlists/*.m3u
-
+config.yml

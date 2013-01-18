@@ -1,0 +1,6 @@
+--- 
+:host: localhost
+:port: 6600
+:status:
+  :state: play
+  :playlist: bbc_radio_4

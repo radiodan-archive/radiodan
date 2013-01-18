@@ -1,6 +1,9 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    activesupport (3.2.11)
+      i18n (~> 0.6)
+      multi_json (~> 1.0)
     archive-tar-minitar (0.5.2)
     childprocess (0.3.6)
       ffi (~> 1.0, >= 1.0.6)
@@ -15,6 +18,7 @@ GEM
     json (1.5.4)
     librmpd (0.1.1)
     log4r (1.1.10)
+    multi_json (1.5.0)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-ssh (2.2.2)
@@ -32,6 +36,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport
   em-simple_telnet
   em-synchrony
   eventmachine
