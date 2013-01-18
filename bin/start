@@ -2,6 +2,9 @@
 require 'pathname'
 require 'yaml'
 
+require 'rubygems'
+require 'bundler/setup'
+
 require 'eventmachine'
 require 'em-synchrony'
 
@@ -36,10 +39,14 @@ EM.synchrony do
   @mpd = MPD.new(@config)
   @mpd.playlists = @playlists
 
-  Signal.trap("INT") do
-    EM::Synchrony.next_tick do
-      @mpd.stop
-      EM.stop
+  # graceful shutdown of service
+  # also stops MPD
+  %w{INT SIGTERM}.each do |signal|
+    Signal.trap(signal) do
+      EM::Synchrony.next_tick do
+        @mpd.stop
+        EM.stop
+      end
     end
   end
 
