@@ -1,4 +1,6 @@
-require 'em-http'
+require "em-synchrony"
+require "em-synchrony/em-http"
+
 
 class RadioPlaylist
   URL = "http://www.bbc.co.uk/radio/listen/live/r%s_aaclca.pls"
@@ -11,7 +13,7 @@ class RadioPlaylist
   
   def download
     STATIONS.each do |station|
-      req = EM::HttpRequest.new(URL % station).get
+      req = EM::HttpRequest.new(URL % station).aget
       req.callback do
         url = req.response.match(/^File1=(.*)$/)[1]
         

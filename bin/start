@@ -3,9 +3,13 @@ require 'eventmachine'
 require_relative '../lib/radio-playlist'
 
 EM.run do
+  # download BBC Radio playlists
   playlists = File.join(File.dirname(__FILE__), '..', 'playlists')
   r = RadioPlaylist.new(path: playlists)
   EM.add_periodic_timer(2) do
     r.download
   end
+  
+  # connect to MPD
+  
 end
