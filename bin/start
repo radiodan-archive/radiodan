@@ -3,10 +3,11 @@ require 'eventmachine'
 require 'em-synchrony'
 require 'pathname'
 
+ROOT = File.join(File.dirname(__FILE__), '..')
+
 require_relative '../lib/radio-playlist'
 require_relative '../lib/mpd'
-
-ROOT = File.join(File.dirname(__FILE__), '..')
+require_relative '../lib/control'
 
 EM.synchrony do
   @mpd = MPD.new
@@ -33,14 +34,10 @@ EM.synchrony do
   end
 
   EM::Synchrony.next_tick do
-    # check for stop file
-    stop_file = File.join(ROOT, 'tmp', 'stop')
+    # check for touched files
+    @file_control = Control::File.new(@mpd)
     EM::Synchrony.add_periodic_timer(0.5) do
-      p = Pathname.new(stop_file)
-      if p.exist?
-        p.delete
-        @mpd.stop
-      end
+      @file_control.check
     end
   end
 end
