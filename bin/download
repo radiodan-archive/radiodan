@@ -9,6 +9,7 @@ require_relative './lib/em_additions'
 require_relative './lib/radio/download'
 require_relative './lib/radio/content'
 
+$PROGRAM_NAME = 'radio_download'
 EM.synchrony do
   downloader = Radio::Download::BBC.new
   

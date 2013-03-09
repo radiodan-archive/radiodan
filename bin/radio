@@ -10,7 +10,7 @@ ROOT = File.join(File.dirname(__FILE__), '..')
 require_relative '../lib/radio'
 require_relative '../lib/web_app'
 
-$PROGRAM_NAME = 'radiodan'
+$PROGRAM_NAME = 'radio_server'
 
 EM.synchrony do  
   config = YAML.load_file(File.join(ROOT, 'config.yml'))

@@ -1,2 +1,2 @@
-server: ./bin/start
-import: ./bin/download
+server:   ./bin/start
+download: ./bin/download
