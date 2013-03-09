@@ -11,5 +11,5 @@ Create ruby daemon to manage MPD:
     - Google Calendar Schedule
   ✓ Refactor ./bin/start into DI / Controller object
   * Show player status on webserver
-  * Refactor playlists into DB model
+  ✓ Refactor playlists into DB model
   * Refactor MPD into player/client
