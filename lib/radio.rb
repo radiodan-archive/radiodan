@@ -4,6 +4,6 @@ module Radio
   end
 end
 
-%w{logger control mpd state stimulus content}.each do |file|
+%w{logging control mpd state stimulus content}.each do |file|
   require_relative "./radio/#{file}"
 end

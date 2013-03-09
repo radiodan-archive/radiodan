@@ -15,17 +15,14 @@ class Control
     @player = Radio::MPD.new(@config)
     @player.state = @state
 
-    @file_control = Radio::Stimulus::File.new(player: @player, state: @state)
-
-    EM.now_and_every(seconds: 0.5) do
-      @file_control.check
-    end
+    @stimulus = Radio::Stimulus.new(player: @player, state: @state)
   end
   
   def start
     # keep player running on schedule
     EM.now_and_every(seconds: 1) do
       @player.sync if @player
+      @stimulus.check
     end
   end
   

@@ -7,5 +7,5 @@ module Radio
   end
 end
 
-require_relative './logger'
+require_relative './logging'
 require_relative './download/bbc'
