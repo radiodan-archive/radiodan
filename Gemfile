@@ -1,23 +1,21 @@
 source 'https://rubygems.org'
 
-group 'development' do
+group :development do
   gem 'vagrant'  
 end
 
-gem 'eventmachine'
-gem 'em-synchrony'
-gem 'em-simple_telnet'
-gem 'em-http-request'
-
-gem 'activesupport'
-
+group :eventmachine do
+  EM_VERSION = '~> 1.0.3'
+  gem 'eventmachine', EM_VERSION
+  gem 'em-synchrony', EM_VERSION
+  gem 'em-http-request', EM_VERSION
+  gem 'em-simple_telnet', '~> 0.0.6'
+end
 
 group :database do
-  gem 'dm-sqlite-adapter'
-  gem 'dm-core'
-  gem 'dm-migrations'
-  gem 'dm-serializer'
-  gem 'dm-types'
+  DM_VERSION    = '~> 1.2.0'
+  gem 'dm-sqlite-adapter',  DM_VERSION
+  gem 'data_mapper',        DM_VERSION
 end
 
 group :web do
@@ -28,6 +26,7 @@ end
 
 group :deploy do
   gem 'foreman'
+  gem 'rake'
 end
 
 group :test do

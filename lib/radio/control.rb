@@ -10,19 +10,10 @@ class Control
   
   def initialize(config)
     @config = config
-    @playlists = Radio::Playlist.new(path: config[:path][:playlist])
 
     @state = Radio::State.new(@config[:status])
     @player = Radio::MPD.new(@config)
     @player.state = @state
-
-    # download BBC Radio playlists
-    # Querystrings suggest each stream valid for 4 hours
-    # dump this info into db,
-    # so we don't have to run on every boot
-    EM.now_and_every(hours: 3.9) do
-      @playlists.download
-    end
 
     @file_control = Radio::Stimulus::File.new(player: @player, state: @state)
 

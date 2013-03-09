@@ -21,3 +21,4 @@ doc/
 music/*.mp3
 playlists/*.m3u
 config.yml
+db/development.sqlite3

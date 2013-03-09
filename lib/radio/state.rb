@@ -50,7 +50,14 @@ class State
     state = panic? ? @config[:panic] : @config
   
     @playback = state[:playback]
-    @content  = Radio::Content.find(state[:playlist])
+    @content  = Radio::Content.find_playlist(state[:playlist])
+    
+    unless @content
+      err = "Cannot find playlist #{state[:playlist]}"
+      logger.error err
+      raise err
+    end
+    
     @timeout  = state[:duration].to_i
   
     logger.debug self

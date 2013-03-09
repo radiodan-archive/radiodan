@@ -2,7 +2,6 @@
   The Content object defines the source of audio
   for the player.
   
-  This needs to be DB backed so we can list out playlists; m3u files are useless
   We cant return the name of a playlist from mpd: we might as well build it up
   in memory.
   
@@ -14,26 +13,32 @@
     play_from: position to resume from (seconds)
 =end
 
+require 'data_mapper'
+
+env = ENV['RACK_ENV'] || 'development'
+db_file = File.join(File.dirname(__FILE__), '..', '..', 'db', "#{env}.sqlite3")
+DataMapper.setup(:default, "sqlite://#{db_file}")
+
 module Radio
 class Content < Struct.new(:type, :files, :mode, :song_number, :play_from)
-  include Logging
+  include DataMapper::Resource
+
+  property :id,           Serial
+  property :name,         String,   required: true
+  property :type,         String,   default:  'playlist'
+  property :files,        Object,   default:  []
+  property :mode,         String,   default:  'sequential'
+  property :song_number,  Integer,  default:  0
+  property :play_from,    Float,    default:  0.0
+  property :created_at,   DateTime
+  property :updated_at,   DateTime
   
-  # stub method for now
-  def self.find(playlist)
-    logger.debug "Finding for #{playlist}"
-    
-    file = File.join(ROOT, 'playlists', "#{playlist}.m3u")
-    url = IO.read(file).chomp rescue ''
-    
-    content = new('playlist', [url], 'sequential', 0, 0)
-    
-    # if it's a podcast, skip 30 seconds in
-    if playlist == 'podcasts'
-      content.mode = 'resume'
-      content.play_from = 30
-    end
-    
-    content
+  def self.find_playlist(playlist)
+    first(type: 'playlist', :name => playlist)
+  end
+  
+  def self.find_or_build_playlist(playlist)
+    find_playlist(playlist) || new(type: 'playlist', :name => playlist)
   end
   
   private
@@ -45,4 +50,7 @@ class Content < Struct.new(:type, :files, :mode, :song_number, :play_from)
     end
   end
 end
+
+Content.auto_upgrade!
+Content.raise_on_save_failure = true
 end

@@ -14,17 +14,10 @@
 require "em-synchrony/em-http"
 
 module Radio
-class Playlist
-  include Logging
-  
+class Download::BBC
+  include Logging  
   URL = "http://www.bbc.co.uk/radio/listen/live/r%s_aaclca.pls"
   STATIONS = %w{1 1x 2 3 4 4lw 4x 5l 5lsp 6}
-  attr_reader :playlists
-
-  def initialize(options)
-    @path = options[:path]
-    @playlists = {}
-  end
 
   def download
     STATIONS.each do |station|
@@ -35,20 +28,13 @@ class Playlist
       logger.debug "Downloading playlist for #{station}"
       
       station_name = "bbc_radio_#{station}"
+      playlist = Content.find_or_build_playlist(station_name)
       
-      if url != @playlists[station_name]
-        @playlists[station_name] = url
-        File.open("#{@path}/#{station_name}.m3u", 'w'){ |f| f.write("#{url}\n") }
+      if url != playlist.files.first
+        playlist.files = Array(url)
+        playlist.save
+        logger.debug "saved #{station_name}"
       end
-    end
-  end
-  
-  private
-  def method_missing(method, *args, &block)
-    if @playlists.respond_to?(method)
-      @playlists.public_send(method, *args, &block)
-    else
-      super
     end
   end
 end
