@@ -7,7 +7,7 @@
   the file deleted.
 =end
 
-class Radio::Control::File
+class Radio::Stimulus::File
   PATH  = File.join(ROOT, 'tmp')
   FILES = %w{stop play pause}
   
