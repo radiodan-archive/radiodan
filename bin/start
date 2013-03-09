@@ -46,6 +46,8 @@ EM.synchrony do
   EM::Synchrony.next_tick do
     # download BBC Radio playlists
     # Querystrings suggest each stream valid for 4 hours
+    # dump this info into db,
+    # so we don't have to run on every boot
     EM.now_and_every(hours: 3.9) do
       @playlists.download
     end

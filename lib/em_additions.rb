@@ -1,3 +1,12 @@
+=begin
+  Most periodic tasks need to be run both now 
+  and after a specificed time period.
+  
+  This Eventmachine helper does that. You can
+  specify the timeframe in hours, minutes or 
+  seconds.
+=end
+
 module EventMachine
   def self.now_and_every(period, &blk)
     yield

@@ -1,3 +1,17 @@
+=begin
+  Radio Playlist
+  --------------
+    In order to face a radio, we need to stream audio content.
+    The BBC radio streams as a playlist file, which contains
+    a link to a time-restricted audio stream.
+    
+    Every few hours, the stream disconnects and you have to 
+    download the playlist again to continue.
+
+    This class downloads the playlists, parses the audio end point,
+    and places it in MPD's playlist directory.
+=end
+
 require "em-synchrony/em-http"
 
 class RadioPlaylist

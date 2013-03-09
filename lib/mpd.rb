@@ -11,6 +11,13 @@ class MPD
     @settings = options[:status]
   end
 
+=begin
+  Sync checks the current status of MPD.
+  Is it paused? Playing? What is it playing?
+  It compares the expected to actual statuses and
+  makes changes required to keep them the same.
+=end
+
   def sync
     current_status = status
     case
@@ -24,6 +31,7 @@ class MPD
   end
 
   def playlist(playlist)
+    # get rid of current playlist, stop playback
     clear
 
     if enqueue playlist
