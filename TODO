@@ -1,3 +1,5 @@
+Add some goddamn tests, dammnit.
+
 Create ruby daemon to manage MPD:
   ✓ Load Radio 4 playlist
   ✓ Start playing

@@ -1,7 +1,7 @@
 require 'em-simple_telnet'
 require 'active_support/hash_with_indifferent_access'
 
-class MPD
+class Radio::MPD
   COMMANDS = %w{stop pause status clear}
   attr_accessor :playlists
 

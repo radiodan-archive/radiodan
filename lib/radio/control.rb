@@ -2,6 +2,6 @@
   The many ways to control the radio.
 =end
 
-module Control; end
+module Radio::Control; end
 
 require_relative './control/file'

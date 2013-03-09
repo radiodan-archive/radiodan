@@ -14,7 +14,7 @@
 
 require "em-synchrony/em-http"
 
-class RadioPlaylist
+class Radio::Playlist
   URL = "http://www.bbc.co.uk/radio/listen/live/r%s_aaclca.pls"
   STATIONS = %w{1 1x 2 3 4 4lw 4x 5l 5lsp 6}
   attr_reader :playlists
