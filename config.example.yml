@@ -8,4 +8,5 @@
   :playlist: podcasts
   :state: resume
   :duration: 5 minutes
-  
+:stimulus:
+  - file

@@ -19,6 +19,7 @@ class Radio::Stimulus::File
     FILES.each do |file|
       p = Pathname.new(File.join(PATH, file))
       if p.exist?
+        Radio::Logger.debug "Responding to file #{file}"
         p.delete
         @mpd.send file
       end

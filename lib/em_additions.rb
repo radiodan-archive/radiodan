@@ -9,7 +9,9 @@
 
 module EventMachine
   def self.now_and_every(period, &blk)
-    yield
+    EM::Synchrony.next_tick do
+      yield
+    end
   
     seconds = case
       when period.include?(:hours)

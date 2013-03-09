@@ -5,23 +5,14 @@ require 'yaml'
 require 'rubygems'
 require 'bundler/setup'
 
-require 'eventmachine'
-require 'em-synchrony'
-
 ROOT = File.join(File.dirname(__FILE__), '..')
 
-@config = YAML.load_file(File.join(ROOT, 'config.yml'))
-
-require_relative '../lib/em_additions'
 require_relative '../lib/radio'
 require_relative '../lib/web_app'
 
-EM.synchrony do
-  @playlists = Radio::Playlist.new(path: File.join(ROOT, 'playlists'))
-  
-  @mpd = Radio::MPD.new(@config)
-  @mpd.playlists = @playlists
-  
+EM.synchrony do  
+  @radio = Radio.new
+
   # start web interface
   Thin::Server.start WebApp, '0.0.0.0', 3000
   
@@ -30,8 +21,11 @@ EM.synchrony do
   %w{INT SIGTERM}.each do |signal|
     Signal.trap(signal) do
       EM::Synchrony.next_tick do
-        @mpd.stop
-        EM.stop
+        begin
+          @radio.stop
+        ensure
+          EM.stop
+        end
       end
     end
   end
@@ -42,27 +36,6 @@ EM.synchrony do
   end
   
   EM::Synchrony.next_tick do
-    # download BBC Radio playlists
-    # Querystrings suggest each stream valid for 4 hours
-    # dump this info into db,
-    # so we don't have to run on every boot
-    EM.now_and_every(hours: 3.9) do
-      @playlists.download
-    end
-  end
-
-  EM::Synchrony.next_tick do
-    # keep MPD running on schedule
-    EM.now_and_every(seconds: 1) do
-      @mpd.sync
-    end
-  end
-
-  EM::Synchrony.next_tick do
-    # check for touched files
-    @file_control = Radio::Control::File.new(@mpd)
-    EM.now_and_every(seconds: 0.5) do
-      @file_control.check
-    end
+    @radio.start
   end
 end

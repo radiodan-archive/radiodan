@@ -25,13 +25,12 @@ class Radio::Playlist
   end
 
   def download
-    print 'downloading...'
     STATIONS.each do |station|
       req = EM::HttpRequest.new(URL % station).get
       return false if req.response_header.status != 200
       
       url = req.response.match(/^File1=(.*)$/)[1]
-      print " #{station}"
+      Radio::Logger.debug "Downloading playlist for #{station}"
       
       station_name = "bbc_radio_#{station}"
       
@@ -40,7 +39,6 @@ class Radio::Playlist
         File.open("#{@path}/#{station_name}.m3u", 'w'){ |f| f.write("#{url}\n") }
       end
     end
-    puts '...doneloading'
   end
   
   private

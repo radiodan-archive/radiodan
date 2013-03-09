@@ -1,5 +1,9 @@
-module Radio; end
+module Radio
+  def self.new(options=nil)
+    Control.new(options)
+  end
+end
 
-%w{control mpd playlist}.each do |file|
+%w{logger control mpd stimulus playlist}.each do |file|
   require_relative "./radio/#{file}"
 end
