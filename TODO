@@ -6,4 +6,6 @@ Create ruby daemon to manage MPD:
     - HTTP Request?
     ✓ A touched file?
     - After X Seconds?
- 
+    - Google Calendar Schedule
+  * Refactor ./bin/start into DI / Controller object
+  * Show player status on webserver
