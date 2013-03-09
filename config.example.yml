@@ -10,5 +10,3 @@
     :duration: 5
 :stimulus:
   - file
-:path:
-  :playlist: './playlists'
