@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     activesupport (3.2.11)
       i18n (~> 0.6)
@@ -8,8 +8,34 @@ GEM
     archive-tar-minitar (0.5.2)
     childprocess (0.3.6)
       ffi (~> 1.0, >= 1.0.6)
+    coderay (1.0.9)
     cookiejar (0.3.0)
     daemons (1.1.9)
+    data_objects (0.10.12)
+      addressable (~> 2.1)
+    dm-core (1.0.2)
+      addressable (~> 2.2)
+      extlib (~> 0.9.15)
+    dm-do-adapter (1.0.2)
+      data_objects (~> 0.10.2)
+      dm-core (~> 1.0.2)
+    dm-migrations (1.0.2)
+      dm-core (~> 1.0.2)
+    dm-serializer (1.0.2)
+      dm-core (~> 1.0.2)
+      fastercsv (~> 1.5.3)
+      json_pure (~> 1.4)
+    dm-sqlite-adapter (1.0.2)
+      dm-do-adapter (~> 1.0.2)
+      do_sqlite3 (~> 0.10.2)
+    dm-types (1.0.2)
+      dm-core (~> 1.0.2)
+      fastercsv (~> 1.5.3)
+      json_pure (~> 1.4)
+      stringex (~> 1.1.0)
+      uuidtools (~> 2.1.1)
+    do_sqlite3 (0.10.12)
+      data_objects (= 0.10.12)
     em-http-request (1.0.3)
       addressable (>= 2.2.3)
       cookiejar
@@ -24,6 +50,8 @@ GEM
       eventmachine (>= 1.0.0.beta.1)
     erubis (2.7.0)
     eventmachine (1.0.0)
+    extlib (0.9.16)
+    fastercsv (1.5.5)
     faye (0.8.8)
       cookiejar (>= 0.3.0)
       em-http-request (>= 0.3.0)
@@ -39,11 +67,17 @@ GEM
     http_parser.rb (0.5.3)
     i18n (0.6.1)
     json (1.5.4)
+    json_pure (1.7.7)
     log4r (1.1.10)
+    method_source (0.8.1)
     multi_json (1.5.0)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-ssh (2.2.2)
+    pry (0.9.12)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
     rack (1.4.4)
     rack-protection (1.3.2)
       rack
@@ -51,12 +85,15 @@ GEM
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
+    slop (3.4.3)
+    stringex (1.1.0)
     thin (1.5.0)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
     thor (0.16.0)
     tilt (1.3.3)
+    uuidtools (2.1.3)
     vagrant (1.0.5)
       archive-tar-minitar (= 0.5.2)
       childprocess (~> 0.3.1)
@@ -73,12 +110,18 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
+  dm-core
+  dm-migrations
+  dm-serializer
+  dm-sqlite-adapter
+  dm-types
   em-http-request
   em-simple_telnet
   em-synchrony
   eventmachine
   faye
   foreman
+  pry
   sinatra
   thin
   vagrant
