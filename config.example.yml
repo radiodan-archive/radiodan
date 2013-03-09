@@ -2,11 +2,13 @@
 :host: localhost
 :port: 6600
 :status:
-  :state: play
+  :playback: play
   :playlist: bbc_radio_4
-:panic:
-  :playlist: podcasts
-  :state: resume
-  :duration: 5 minutes
+  :panic:
+    :playback: play
+    :playlist: bbc_radio_1
+    :duration: 5
 :stimulus:
   - file
+:path:
+  :playlist: './playlists'
