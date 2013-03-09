@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'vagrant'  
+  gem 'vagrant', '~> 0.5.4'
 end
 
 group :eventmachine do
   EM_VERSION = '~> 1.0.3'
-  gem 'eventmachine', EM_VERSION
-  gem 'em-synchrony', EM_VERSION
-  gem 'em-http-request', EM_VERSION
+  gem 'eventmachine',     EM_VERSION
+  gem 'em-synchrony',     EM_VERSION
+  gem 'em-http-request',  EM_VERSION
   gem 'em-simple_telnet', '~> 0.0.6'
 end
 
@@ -19,16 +19,16 @@ group :database do
 end
 
 group :web do
-  gem 'faye'
-  gem 'thin'
-  gem 'sinatra'
+  gem 'faye',     '~> 0.8.9'
+  gem 'thin',     '~> 1.5.0'
+  gem 'sinatra',  '~> 1.3.5'
 end
 
 group :deploy do
-  gem 'foreman'
-  gem 'rake'
+  gem 'foreman',  '~> 0.62.0'
+  gem 'rake',     '~> 10.0.3'
 end
 
 group :test do
-  gem 'pry'
+  gem 'pry', '~> 0.9.12'
 end
