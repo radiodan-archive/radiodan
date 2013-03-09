@@ -1,2 +1,2 @@
 server: ./bin/start
-import: bundle exec rake import:bbc
+import: ./bin/download

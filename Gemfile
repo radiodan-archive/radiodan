@@ -26,7 +26,6 @@ end
 
 group :deploy do
   gem 'foreman',  '~> 0.62.0'
-  gem 'rake',     '~> 10.0.3'
 end
 
 group :test do
