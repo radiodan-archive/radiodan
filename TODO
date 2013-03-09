@@ -9,5 +9,7 @@ Create ruby daemon to manage MPD:
     ✓ A touched file?
     - After X Seconds?
     - Google Calendar Schedule
-  * Refactor ./bin/start into DI / Controller object
+  ✓ Refactor ./bin/start into DI / Controller object
   * Show player status on webserver
+  * Refactor playlists into DB model
+  * Refactor MPD into player/client
