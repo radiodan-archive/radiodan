@@ -21,6 +21,8 @@ package { "mpd": }
 package { "mpc": } 
 package { "ncmpcpp": } 
 package { "alsa-utils": } 
+package { "sqlite3": }
+package { "libsqlite3-dev": }
 
 service { "mpd":
   ensure => "running",
