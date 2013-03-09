@@ -1,20 +1,22 @@
 =begin
-  Radio Playlist
-  --------------
-    In order to face a radio, we need to stream audio content.
-    The BBC radio streams as a playlist file, which contains
-    a link to a time-restricted audio stream.
-    
-    Every few hours, the stream disconnects and you have to 
-    download the playlist again to continue.
+  In order to fake a radio, we need to stream radio content.
+  BBC Radio streams are playlist files, which contain
+  a link to a time-restricted audio stream.
+  
+  Every few hours, the stream disconnects and you have to 
+  download the playlist again to continue.
 
-    This class downloads the playlists, parses the audio end point,
-    and places it in MPD's playlist directory.
+  This class downloads the playlists, 
+  parses for the audio end point and
+  places it in MPD's playlist directory.
 =end
 
 require "em-synchrony/em-http"
 
-class Radio::Playlist
+module Radio
+class Playlist
+  include Logging
+  
   URL = "http://www.bbc.co.uk/radio/listen/live/r%s_aaclca.pls"
   STATIONS = %w{1 1x 2 3 4 4lw 4x 5l 5lsp 6}
   attr_reader :playlists
@@ -30,7 +32,7 @@ class Radio::Playlist
       return false if req.response_header.status != 200
       
       url = req.response.match(/^File1=(.*)$/)[1]
-      Radio::Logger.debug "Downloading playlist for #{station}"
+      logger.debug "Downloading playlist for #{station}"
       
       station_name = "bbc_radio_#{station}"
       
@@ -49,4 +51,5 @@ class Radio::Playlist
       super
     end
   end
+end
 end

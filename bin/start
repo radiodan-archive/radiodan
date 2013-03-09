@@ -10,8 +10,11 @@ ROOT = File.join(File.dirname(__FILE__), '..')
 require_relative '../lib/radio'
 require_relative '../lib/web_app'
 
+$PROGRAM_NAME = 'radiodan'
+
 EM.synchrony do  
-  @radio = Radio.new
+  config = YAML.load_file(File.join(ROOT, 'config.yml'))
+  @radio = Radio.new(config)
 
   # start web interface
   Thin::Server.start WebApp, '0.0.0.0', 3000

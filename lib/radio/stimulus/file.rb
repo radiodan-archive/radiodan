@@ -9,10 +9,11 @@
 
 class Radio::Stimulus::File
   PATH  = File.join(ROOT, 'tmp')
-  FILES = %w{stop play pause}
+  FILES = %w{stop play pause panic}
   
-  def initialize(mpd)
-    @mpd = mpd
+  def initialize(options)
+    @player = options[:player]
+    @state  = options[:state]
   end
   
   def check
@@ -21,7 +22,12 @@ class Radio::Stimulus::File
       if p.exist?
         Radio::Logger.debug "Responding to file #{file}"
         p.delete
-        @mpd.send file
+        
+        if file == 'panic'
+          @state.panic!
+        else
+          @mpd.send file
+        end
       end
     end
   end

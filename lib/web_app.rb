@@ -1,6 +1,4 @@
-require 'thin'
-require 'sinatra/base'
-require 'faye'
+Bundler.require :web
 
 class WebApp < Sinatra::Base
   use Faye::RackAdapter, :mount => '/faye', :timeout => 25

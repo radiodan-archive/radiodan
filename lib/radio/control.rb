@@ -3,15 +3,18 @@ require 'em-synchrony'
 
 require_relative '../em_additions'
 
-class Radio::Control
+module Radio
+class Control
+  include Logging
   attr_accessor :config
   
-  def initialize(config=nil)
-    @config = config || YAML.load_file(File.join(ROOT, 'config.yml'))
-    @playlists = Radio::Playlist.new(path: File.join(ROOT, 'playlists'))
+  def initialize(config)
+    @config = config
+    @playlists = Radio::Playlist.new(path: config[:path][:playlist])
 
-    @mpd = Radio::MPD.new(@config)
-    @mpd.playlists = @playlists
+    @state = Radio::State.new(@config[:status])
+    @player = Radio::MPD.new(@config)
+    @player.state = @state
 
     # download BBC Radio playlists
     # Querystrings suggest each stream valid for 4 hours
@@ -21,7 +24,7 @@ class Radio::Control
       @playlists.download
     end
 
-    @file_control = Radio::Stimulus::File.new(@mpd)
+    @file_control = Radio::Stimulus::File.new(player: @player, state: @state)
 
     EM.now_and_every(seconds: 0.5) do
       @file_control.check
@@ -29,14 +32,15 @@ class Radio::Control
   end
   
   def start
-    # keep MPD running on schedule
+    # keep player running on schedule
     EM.now_and_every(seconds: 1) do
-      @mpd.sync if @mpd
+      @player.sync if @player
     end
   end
   
   def stop
-    Radio::Logger.info "Shutting down"
-    @mpd.stop if @mpd
+    logger.info "Shutting down"
+    @player.stop if @player
   end
+end
 end
