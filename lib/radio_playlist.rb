@@ -18,14 +18,10 @@ class RadioPlaylist
   URL = "http://www.bbc.co.uk/radio/listen/live/r%s_aaclca.pls"
   STATIONS = %w{1 1x 2 3 4 4lw 4x 5l 5lsp 6}
   attr_reader :playlists
-  
+
   def initialize(options)
     @path = options[:path]
     @playlists = {}
-  end
-
-  def [](station_name)
-    @playlists[station_name]
   end
 
   def download
@@ -45,5 +41,14 @@ class RadioPlaylist
       end
     end
     puts '...doneloading'
+  end
+  
+  private
+  def method_missing(method, *args, &block)
+    if @playlists.respond_to?(method)
+      @playlists.public_send(method, *args, &block)
+    else
+      super
+    end
   end
 end
