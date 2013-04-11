@@ -7,8 +7,10 @@ require 'bundler/setup'
 
 ROOT = File.join(File.dirname(__FILE__), '..')
 
-require_relative '../lib/radio'
-require_relative '../lib/web_app'
+$: << './lib'
+
+require 'radio'
+require 'web_app'
 
 $PROGRAM_NAME = 'radio_server'
 

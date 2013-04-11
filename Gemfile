@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'vagrant', '~> 0.5.4'
+  gem 'vagrant', '~> 1.0.0'
 end
 
 group :eventmachine do

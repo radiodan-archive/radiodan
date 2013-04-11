@@ -1,2 +1,2 @@
-server:   ./bin/start
+server:   ./bin/radio
 download: ./bin/download
