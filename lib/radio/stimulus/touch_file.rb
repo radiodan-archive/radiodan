@@ -28,6 +28,10 @@ module Radio
         
           if file == 'panic'
             @state.panic!
+          elsif file == 'stop'
+            @state.stop
+          elsif file == 'play'
+            @state.play
           else
             @mpd.send file
           end

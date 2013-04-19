@@ -22,6 +22,14 @@ class State
     @panic  = false
     set_state
   end
+
+  def stop
+    @playback = "stop"
+  end
+
+  def play
+    @playback = "play"
+  end
   
   def panic?
     @panic == true
