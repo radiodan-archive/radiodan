@@ -33,7 +33,7 @@ module Radio
           elsif file == 'play'
             @state.play
           else
-            @mpd.send file
+            @player.send file
           end
         end
       end
