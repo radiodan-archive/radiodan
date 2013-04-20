@@ -31,13 +31,13 @@ class Panic
       logger.debug "panic for #{@timeout} seconds"
       @player.state = @state
       sleep(@timeout)
-      calm_to_state original_state
+      return_to_state original_state
     end
   
     @panic
   end
 
-  def calm_to_state(state)
+  def return_to_state(state)
     logger.debug "calming"
     @panic = false
     @player.state = state
