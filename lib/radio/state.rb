@@ -15,59 +15,24 @@
 module Radio
 class State
   include Logging
-  attr_reader :playback, :content, :timeout, :panic
+  attr_reader :playback, :content
 
   def initialize(config={})
-    @config = config
-    @panic  = false
-    set_state
-  end
-
-  def stop
-    @playback = "stop"
-  end
-
-  def play
-    @playback = "play"
-  end
-  
-  def panic?
-    @panic == true
-  end
-
-  def panic!
-    @panic = true
-    set_state
-  
-    Thread.new do
-      logger.debug "panic for #{@timeout} seconds"
-      sleep(@timeout)
-      calm!
-    end
-  
-    @panic
-  end
-
-  def calm!
-    @panic = false
+    @playback = config[:playback] || 'play'
+    @playlist = config[:playlist]
     set_state
   end
 
   private
   def set_state
-    state = panic? ? @config[:panic] : @config
-  
-    @playback = state[:playback]
-    @content  = Radio::Content.find_playlist(state[:playlist])
+    @content  = Radio::Content.find_playlist(@playlist)
     
     unless @content
-      err = "Cannot find playlist #{state[:playlist]}"
+      err = "Cannot find playlist #{@playlist}"
       logger.error err
       raise err
     end
     
-    @timeout  = state[:duration].to_i
-  
     logger.debug self
   end
 end

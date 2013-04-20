@@ -14,26 +14,28 @@
 require "em-synchrony/em-http"
 
 module Radio
-class Download::BBC
+class BBCDownloader
   include Logging  
   URL = "http://www.bbc.co.uk/radio/listen/live/r%s_aaclca.pls"
   STATIONS = %w{1 1x 2 3 4 4lw 4x 5l 5lsp 6}
 
-  def download
-    STATIONS.each do |station|
-      req = EM::HttpRequest.new(URL % station).get
-      return false if req.response_header.status != 200
-      
-      url = req.response.match(/^File1=(.*)$/)[1]
-      logger.debug "Downloading playlist for #{station}"
-      
-      station_name = "bbc_radio_#{station}"
-      playlist = Content.find_or_build_playlist(station_name)
-      
-      if url != playlist.files.first
-        playlist.files = Array(url)
-        playlist.save
-        logger.debug "saved #{station_name}"
+  def call(player)
+    EM.now_and_every(hours: 3) do
+      STATIONS.each do |station|
+        req = EM::HttpRequest.new(URL % station).get
+        next if req.response_header.status != 200
+
+        url = req.response.match(/^File1=(.*)$/)[1]
+        logger.debug "Downloading playlist for #{station}"
+
+        station_name = "bbc_radio_#{station}"
+        playlist = Content.find_or_build_playlist(station_name)
+
+        if url != playlist.files.first
+          playlist.files = Array(url)
+          playlist.save
+          logger.debug "saved #{station_name}"
+        end
       end
     end
   end

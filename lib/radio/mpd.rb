@@ -12,7 +12,6 @@ class MPD
   def initialize(options={})
     @port     = options[:port] || 6600
     @host     = options[:host] || 'localhost'
-    @settings = options[:status]    
   end
 
 =begin
