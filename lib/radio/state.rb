@@ -7,9 +7,6 @@
     content: content object to be playing
   
   It can be updated by any of the stimulus objects.
-  
-  It can be put into 'panic' mode, when the attributes change
-  for a set amount of time (determined in config.yml)
 =end
 
 require 'radio/content'
