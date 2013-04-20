@@ -3,31 +3,35 @@ module EventBinding
   def register_event(event, &blk)
     logger.info "Registered event #{event}"
     event = event.to_sym
-    events[event] << blk
+    event_bindings[event] << blk
     
     true
   end
   
   def trigger_event(event, data=nil)
     event = event.to_sym
-    event_bindings = events[event]
+    bindings = event_bindings[event]
     
-    unless event_bindings
+    unless bindings
       logger.error "Event #{event} triggered but not found" 
     end
     
-    event_bindings.each do |blk|
+    bindings.each do |blk|
       blk.call(data)
     end
   end
   
-  private
   def events
-    @events ||= Hash.new{ |h, k| h[k] = [] }
+    event_bindings.keys.sort
+  end
+  
+  private
+  def event_bindings
+    @event_bindings ||= Hash.new{ |h, k| h[k] = [] }
   end
   
   def method_missing(method, *args, &block)
-    if events.include?(method)
+    if event_bindings.include?(method)
       trigger_event(method, *args)
     else
       super
