@@ -1,6 +1,6 @@
 require 'logger'
 
-class Radio  
+class Radio
 module Logging
   def self.included(klass)
     klass.extend ClassMethods
