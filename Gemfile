@@ -18,18 +18,4 @@ group :database do
   gem 'data_mapper',        DM_VERSION
 end
 
-group :web do
-  gem 'faye',     '~> 0.8.9'
-  gem 'thin',     '~> 1.5.0'
-  gem 'sinatra',  '~> 1.3.5'
-end
-
-group :deploy do
-  gem 'foreman',  '~> 0.62.0'
-end
-
-group :test do
-  gem 'pry', '~> 0.9.12'
-end
-
 gem 'active_support'

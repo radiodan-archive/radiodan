@@ -1,10 +1,9 @@
-module Radio
+class Radio
 class Panic
   include Logging
   
   def initialize(config)
     @panic      = false
-    @calm_state = nil
     @timeout    = config.delete(:duration).to_i
     @state      = State.new(config)
   end
@@ -23,28 +22,23 @@ class Panic
 
   def panic!
     @panic = true
-    #store old state
-    @calm_state = @player.state
+    
+    original_state = @player.state
   
     Thread.new do
       logger.debug "panic for #{@timeout} seconds"
       @player.state = @state
       sleep(@timeout)
-      calm!
+      calm_to_state original_state
     end
   
     @panic
   end
 
-  def calm!
+  def calm_to_state(state)
     logger.debug "calming"
     @panic = false
-    
-    if @calm_state
-      logger.debug "setting calm state"
-      @player.state = @calm_state
-      @calm_state = nil
-    end
+    @player.state = state
   end
 end
 end

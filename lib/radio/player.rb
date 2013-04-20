@@ -1,4 +1,4 @@
-module Radio
+class Radio
 class Player
   include Logging
   attr_reader :adapter, :state, :events

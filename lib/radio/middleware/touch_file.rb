@@ -7,7 +7,7 @@ the corresponding command is called and
 the file deleted.
 =end
 
-module Radio
+class Radio
 class TouchFile
   include Logging
   FILES = %w{stop play pause panic}
@@ -17,7 +17,7 @@ class TouchFile
   end
 
   def call(player)
-    EM.now_and_every(seconds: 0.5) do
+    EM.now_and_every(0.5) do
       FILES.each do |file|
         # logger.debug "check for #{file}"
         p = Pathname.new(File.join(@path, file))

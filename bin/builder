@@ -1,22 +1,15 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'bundler/setup'
-require 'eventmachine'
-require 'em-synchrony'
 
-$: << './lib'
-ROOT = File.join(File.dirname(__FILE__), '..')
-
-require 'radio'
-
-$PROGRAM_NAME = 'radio_builder'
+require './lib/radio'
 
 radio = Radio.new do |builder|
   builder.player :MPD, :host => 'localhost', :port => 6600
   builder.state  :playlist => :bbc_radio_4
-  builder.use    :touch_file, :dir => File.join(ROOT, 'tmp')
+  builder.use    :touch_file, :dir => File.join(File.dirname(__FILE__), '..', 'tmp')
   builder.use    :panic, :duration => 5, :playlist => :bbc_radio_1
-  builder.use    :BBC_downloader
+  builder.use    :download_BBC_radio
 end
 
 radio.start

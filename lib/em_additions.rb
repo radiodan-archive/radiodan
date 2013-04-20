@@ -9,11 +9,9 @@
 
 module EventMachine
   def self.now_and_every(period, &blk)
-    EM::Synchrony.next_tick do
-      yield
-    end
-  
     seconds = case
+      when period.respond_to?(:to_f)
+        period.to_f
       when period.include?(:hours)
         period[:hours]*60*60
       when period.include?(:minutes)
@@ -21,7 +19,11 @@ module EventMachine
       else
         period[:seconds]
     end
-  
+    
+    EM::Synchrony.next_tick do
+      yield
+    end
+    
     EM::Synchrony.add_periodic_timer(seconds) do
       yield
     end

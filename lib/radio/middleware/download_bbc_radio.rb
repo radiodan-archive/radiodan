@@ -13,9 +13,9 @@
 
 require "em-synchrony/em-http"
 
-module Radio
-class BBCDownloader
-  include Logging  
+class Radio
+class DownloadBBCRadio
+  include Logging
   URL = "http://www.bbc.co.uk/radio/listen/live/r%s_aaclca.pls"
   STATIONS = %w{1 1x 2 3 4 4lw 4x 5l 5lsp 6}
 

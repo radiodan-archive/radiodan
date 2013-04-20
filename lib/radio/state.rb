@@ -12,7 +12,9 @@
   for a set amount of time (determined in config.yml)
 =end
 
-module Radio
+require 'radio/content'
+
+class Radio
 class State
   include Logging
   attr_reader :playback, :content

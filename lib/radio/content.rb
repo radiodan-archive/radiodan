@@ -19,7 +19,7 @@ env = ENV['RACK_ENV'] || 'development'
 db_file = File.join(File.dirname(__FILE__), '..', '..', 'db', "#{env}.sqlite3")
 DataMapper.setup(:default, "sqlite://#{db_file}")
 
-module Radio
+class Radio
 class Content < Struct.new(:type, :files, :mode, :song_number, :play_from)
   include DataMapper::Resource
 
