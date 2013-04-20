@@ -15,8 +15,8 @@ radio = Radio.new do |builder|
   builder.player :MPD, :host => 'localhost', :port => 6600
   builder.state  :playlist => :bbc_radio_4
   builder.use    :touch_file, :dir => File.join(ROOT, 'tmp')
-  builder.use    :BBC_downloader
   builder.use    :panic, :duration => 5, :playlist => :bbc_radio_1
+  builder.use    :BBC_downloader
 end
 
 radio.start

@@ -1,2 +1,1 @@
-server:   ./bin/radio
-download: ./bin/download
+server:   ./bin/builder

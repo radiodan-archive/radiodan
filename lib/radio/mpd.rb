@@ -7,11 +7,27 @@ class MPD
   COMMANDS = %w{stop pause status clear}
   Ack = Struct.new(:error_id, :position, :command, :description)
   
-  attr_accessor :state
+  attr_reader :player
 
   def initialize(options={})
     @port     = options[:port] || 6600
     @host     = options[:host] || 'localhost'
+  end
+  
+  def player=(player)
+    @player = player
+    
+    # register typical player commands
+    COMMANDS.each do |command|
+      @player.register_event command do |data|
+        self.send(command, *data)
+      end
+    end
+    
+    # register sync method
+    @player.register_event :sync do
+      self.sync
+    end
   end
 
 =begin
@@ -23,6 +39,8 @@ class MPD
 
   def sync
     current_status = status
+    state = player.state
+    
     case
     when !state.content.files.include?(current_status.file)
       logger.debug 'update content'

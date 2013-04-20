@@ -9,7 +9,7 @@ the file deleted.
 
 module Radio
 class TouchFile
-  include Radio::Logging
+  include Logging
   FILES = %w{stop play pause panic}
   
   def initialize(config)
@@ -19,7 +19,7 @@ class TouchFile
   def call(player)
     EM.now_and_every(seconds: 0.5) do
       FILES.each do |file|
-        logger.debug "check for #{file}"
+        # logger.debug "check for #{file}"
         p = Pathname.new(File.join(@path, file))
         if p.exist?
           logger.debug "Responding to file #{file}"

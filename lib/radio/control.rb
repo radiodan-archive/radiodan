@@ -13,12 +13,9 @@ class Control
     
   def initialize(&blk)
     @middlewares = []
+    @player = Player.new
     
     yield(self)
-    
-    raise "no player set" if @player.nil?
-    
-    @middlewares.each{ |m| m.call(@player) }
   end
 
   def use(klass, *config)
@@ -26,7 +23,7 @@ class Control
   end
   
   def player(klass, *config)
-    @player = register(klass, *config)
+    @player.adapter = register(klass, *config)
   end
   
   def state(options)
@@ -35,8 +32,30 @@ class Control
 
   def start
     # keep player running on schedule
-    EM.now_and_every(seconds: 1) do
-      @player.sync if @player
+    raise "no player set" unless @player.adapter?
+    
+    EM.synchrony do
+      EM.next_tick do      
+        @middlewares.each{ |m| m.call(@player) }
+      end
+
+      EM.now_and_every(seconds: 1) do
+        logger.info "SYNC!"
+        @player.sync if @player
+      end
+      
+      %w{INT TERM SIGHUP SIGINT SIGTERM}.each do |signal|
+        Signal.trap(signal) do
+          puts "Trapped #{signal}"
+          EM::Synchrony.next_tick do
+            begin
+              @player.stop
+            ensure
+              EM.stop
+            end
+          end
+        end
+      end
     end
   end
   

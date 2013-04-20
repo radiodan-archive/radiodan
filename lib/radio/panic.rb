@@ -1,6 +1,6 @@
 module Radio
 class Panic
-  attr_reader :panic, :state
+  include Logging
   
   def initialize(config)
     @panic      = false
@@ -11,7 +11,10 @@ class Panic
   
   def call(player)
     @player = player
-    # register panic event here
+    
+    @player.register_event :panic do
+      panic!
+    end
   end
   
   def panic?
@@ -22,11 +25,10 @@ class Panic
     @panic = true
     #store old state
     @calm_state = @player.state
-    
-    player.state = @state
   
     Thread.new do
       logger.debug "panic for #{@timeout} seconds"
+      @player.state = @state
       sleep(@timeout)
       calm!
     end
@@ -35,10 +37,12 @@ class Panic
   end
 
   def calm!
+    logger.debug "calming"
     @panic = false
     
     if @calm_state
-      player.state = @calm_state
+      logger.debug "setting calm state"
+      @player.state = @calm_state
       @calm_state = nil
     end
   end
