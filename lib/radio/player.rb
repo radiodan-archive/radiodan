@@ -1,10 +1,14 @@
+require 'radio/event_binding'
+
 class Radio
 class Player
   include Logging
-  attr_reader :adapter, :events
+  include EventBinding
+  
+  attr_reader :adapter, :state
   
   def initialize
-    @events = Hash.new{ |h, k| h[k] = [] }
+    @state = State.new(:playback => 'stopped')
   end
   
   def adapter=(adapter)
@@ -23,31 +27,6 @@ class Player
     @state
   end
   
-  def state
-    @state || State.new(:playback => 'stopped')
-  end
-  
-  def register_event(event, &blk)
-    logger.info "Registered event #{event}"
-    event = event.to_sym
-    @events[event] << blk
-    
-    true
-  end
-  
-  def trigger_event(event, *data)
-    event = event.to_sym
-    event_bindings = events[event]
-    
-    unless event_bindings
-      logger.error "Event #{event} triggered but not found" 
-    end
-    
-    event_bindings.each do |blk|
-      blk.call(data)
-    end
-  end
-
 =begin
   Sync checks the current status of the player.
   Is it paused? Playing? What is it playing?
@@ -60,15 +39,13 @@ class Player
 
     # playlist
     unless expected_state.content.files.include?(current_state.file)
-      logger.debug 'update content'
-      logger.debug "#{current_state.file} != #{expected_state.content.files.first}"
+      logger.debug "Expected: #{expected_state.content.files.first} Got: #{current_state.file}"
       adapter.playlist = expected_state.content
     end
 
     # playback state
     unless expected_state.playback == current_state.state
-      logger.debug 'update playback'
-      logger.debug "#{expected_state.playback} != #{current_state.state}"
+      logger.debug "Expected: #{expected_state.playback} Got: #{current_state.state}"
       adapter.send expected_state.playback
     end
   end
