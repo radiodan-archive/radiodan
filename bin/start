@@ -11,9 +11,7 @@ radio = Radio.new do |builder|
   builder.state   :playlist => :bbc_radio_4
   builder.use     :touch_file, :dir => File.join(root, 'tmp')
   builder.use     :panic, :duration => 5, :playlist => :bbc_radio_1
+  # builder.use     :download_BBC_radio
 end
-
-# require 'pry'
-# binding.pry
 
 radio.start

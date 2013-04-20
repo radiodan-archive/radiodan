@@ -19,7 +19,7 @@ class DownloadBBCRadio
   URL = "http://www.bbc.co.uk/radio/listen/live/r%s_aaclca.pls"
   STATIONS = %w{1 1x 2 3 4 4lw 4x 5l 5lsp 6}
 
-  def run
+  def call(player)
     EM.now_and_every(hours: 3) do
       STATIONS.each do |station|
         req = EM::HttpRequest.new(URL % station).get
