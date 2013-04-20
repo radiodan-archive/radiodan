@@ -6,7 +6,7 @@ require 'radio/state'
 
 class Radio
 class Builder
-  attr_reader :middleware
+  attr_reader :middleware, :player
     
   def initialize(&blk)
     @middleware = []
@@ -19,9 +19,7 @@ class Builder
     @middleware << register(klass, *config)
   end
   
-  def player(klass=nil, *config)
-    return @player if klass.nil?
-    
+  def adapter(klass, *config)
     @player.adapter = register(klass, *config)
   end
   
