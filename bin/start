@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'bundler/setup'
+
+require './lib/radio'
+
+root = File.join(File.dirname(__FILE__), '..')
+
+radio = Radio.new do |builder|
+  builder.player  :MPD, :host => 'localhost', :port => 6600
+  builder.state   :playlist => :bbc_radio_4
+  builder.use     :touch_file, :dir => File.join(root, 'tmp')
+  builder.use     :panic, :duration => 5, :playlist => :bbc_radio_1
+end
+
+# require 'pry'
+# binding.pry
+
+radio.start

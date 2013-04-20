@@ -9,8 +9,7 @@ require 'radio/builder'
 
 class Radio
   include Logging
-  attr_reader :builder
-  
+
   def initialize(&blk)
     @builder = Builder.new(&blk)
   end
@@ -23,7 +22,7 @@ class Radio
       trap_signals!
       
       EM.next_tick do      
-        builder.call_middleware!
+        @builder.call_middleware!
       end
 
       EM.now_and_every(seconds: 1) do
@@ -33,14 +32,17 @@ class Radio
     end
   end
   
-  def stop
-    logger.info "Shutting down"
-    player.stop if player
+  private
+  def method_missing(method, *args, &block)
+    begin
+      player.send method, *args, &block
+    rescue NoMethodError
+      super
+    end
   end
   
-  private
   def player
-    builder.player
+    @builder.player
   end
   
   def trap_signals!

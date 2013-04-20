@@ -38,16 +38,16 @@ class MPD
 =end
 
   def sync
-    current_status = status
-    state = player.state
+    current_state  = status
+    expected_state = player.state
     
     case
-    when !state.content.files.include?(current_status.file)
-      logger.debug 'update content'
-      self.playlist = state.content
-    when state.playback != current_status.state
+    when expected_state.playback != current_state.state
       logger.debug 'update playback'
-      self.send state.playback.to_sym
+      self.send expected_state.playback.to_sym
+    when !expected_state.content.files.include?(current_state.file)
+      logger.debug 'update content'
+      self.playlist = expected_state.content
     else
       logger.debug 'do nothing'
       # update play position if resume
@@ -83,6 +83,7 @@ class MPD
       @status.merge!(playlist)
     end
     
+    # needs to be instance of Radio::State
     OpenStruct.new(@status)
   end
 

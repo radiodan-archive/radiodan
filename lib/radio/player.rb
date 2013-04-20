@@ -1,7 +1,7 @@
 class Radio
 class Player
   include Logging
-  attr_reader :adapter, :state, :events
+  attr_reader :adapter, :events
   
   def initialize
     @events = Hash.new{ |h, k| h[k] = [] }
@@ -21,6 +21,10 @@ class Player
     trigger_event(:state, @state)
     
     @state
+  end
+  
+  def state
+    @state || State.new(:playback => 'stopped')
   end
   
   def register_event(event, &blk)
