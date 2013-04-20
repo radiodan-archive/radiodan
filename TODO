@@ -1,15 +1,5 @@
-Add some goddamn tests, dammnit.
-
-Create ruby daemon to manage MPD:
-  ✓ Load Radio 4 playlist
-  ✓ Start playing
-  * Add listeners to check for end of songs / playlist
-  * Play a different track in response to stimuli:
-    - HTTP Request?
-    ✓ A touched file?
-    - After X Seconds?
-    - Google Calendar Schedule
-  ✓ Refactor ./bin/start into DI / Controller object
-  * Show player status on webserver
-  ✓ Refactor playlists into DB model
-  * Refactor MPD into player/client
+* Add some goddamn tests, dammnit.
+* Remove DB persistence from Radio::Content
+* Pass Radio::Content objects directly into Radio::State
+* Generate gem
+* Move BBC Downloader into own radio player thing, using radio_dan as gem
