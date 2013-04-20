@@ -40,13 +40,13 @@ class Player
     # playlist
     unless expected_state.content.files.include?(current_state.file)
       logger.debug "Expected: #{expected_state.content.files.first} Got: #{current_state.file}"
-      adapter.playlist = expected_state.content
+      trigger_event :playlist, expected_state.content
     end
 
     # playback state
     unless expected_state.playback == current_state.state
       logger.debug "Expected: #{expected_state.playback} Got: #{current_state.state}"
-      adapter.send expected_state.playback
+      trigger_event expected_state.playback
     end
   end
 end

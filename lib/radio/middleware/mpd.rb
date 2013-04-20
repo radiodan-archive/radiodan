@@ -4,7 +4,7 @@ require 'ostruct'
 class Radio
 class MPD
   include Logging
-  COMMANDS = %w{stop pause clear}
+  COMMANDS = %w{stop pause clear play}
   Ack = Struct.new(:error_id, :position, :command, :description)
   
   attr_reader :player
@@ -20,8 +20,17 @@ class MPD
     # register typical player commands
     COMMANDS.each do |command|
       @player.register_event command do |data|
-        self.send(command, *data)
+        if data
+          self.send(command, data)
+        else
+          self.send(command)
+        end
       end
+    end
+    
+    # register new playlist events
+    @player.register_event :playlist do |playlist|
+      self.playlist = playlist
     end
   end
 

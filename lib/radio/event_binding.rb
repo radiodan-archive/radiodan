@@ -8,7 +8,7 @@ module EventBinding
     true
   end
   
-  def trigger_event(event, *data)
+  def trigger_event(event, data=nil)
     event = event.to_sym
     event_bindings = events[event]
     
@@ -27,7 +27,7 @@ module EventBinding
   end
   
   def method_missing(method, *args, &block)
-    if @events.include?(method)
+    if events.include?(method)
       trigger_event(method, *args)
     else
       super
