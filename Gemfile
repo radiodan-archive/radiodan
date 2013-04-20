@@ -13,10 +13,4 @@ group :eventmachine do
   gem 'em-simple_telnet', '~> 0.0.6'
 end
 
-group :database do
-  DM_VERSION    = '~> 1.2.0'
-  gem 'dm-sqlite-adapter',  DM_VERSION
-  gem 'data_mapper',        DM_VERSION
-end
-
 gem 'active_support'

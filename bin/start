@@ -1,20 +1,26 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'bundler/setup'
-
 require './lib/radio'
+
+require './lib/download_bbc_radio'
 
 root = File.join(File.dirname(__FILE__), '..')
 
-radio1 = Radio::Content.find_playlist('bbc_radio_1')
-radio4 = Radio::Content.find_playlist('bbc_radio_4')
+EM.synchrony do
+  @bbc_stations = DownloadBBCRadio.new
+  @bbc_stations.run
+  EM.stop
+end
+
+radio1 = @bbc_stations.stations['bbc_radio_1']
+radio4 = @bbc_stations.stations['bbc_radio_4']
 
 radio = Radio.new do |builder|
   builder.adapter :MPD, :host => 'localhost', :port => 6600
   builder.state   :content => radio4
   builder.use     :touch_file, :dir => File.join(root, 'tmp')
   builder.use     :panic, :duration => 5, :content => radio1
-  # builder.use     :download_BBC_radio
 end
 
 radio.start
