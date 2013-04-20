@@ -43,7 +43,7 @@ class Content < Struct.new(:type, :files, :mode, :song_number, :play_from)
   
   private
   def method_missing(method, *args, &block)
-    if files.include?(method)
+    if files.respond_to?(method)
       files.send(method, *args, &block)
     else
       super

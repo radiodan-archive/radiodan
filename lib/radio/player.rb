@@ -40,11 +40,36 @@ class Player
     event_bindings = events[event]
     
     unless event_bindings
-      raise "Event #{event} triggered but not found" 
+      logger.error "Event #{event} triggered but not found" 
     end
     
     event_bindings.each do |blk|
       blk.call(data)
+    end
+  end
+
+=begin
+  Sync checks the current status of the player.
+  Is it paused? Playing? What is it playing?
+  It compares the expected to actual statuses and
+  makes changes required to keep them the same.
+=end
+  def sync
+    current_state  = adapter.state
+    expected_state = state
+
+    # playlist
+    unless expected_state.content.files.include?(current_state.file)
+      logger.debug 'update content'
+      logger.debug "#{current_state.file} != #{expected_state.content.files.first}"
+      adapter.playlist = expected_state.content
+    end
+
+    # playback state
+    unless expected_state.playback == current_state.state
+      logger.debug 'update playback'
+      logger.debug "#{expected_state.playback} != #{current_state.state}"
+      adapter.send expected_state.playback
     end
   end
 

@@ -6,17 +6,17 @@ require 'radio/state'
 
 class Radio
 class Builder
-  attr_reader :middlewares
+  attr_reader :middleware
     
   def initialize(&blk)
-    @middlewares = []
+    @middleware = []
     @player = Player.new
     
     yield(self)
   end
 
   def use(klass, *config)
-    @middlewares << register(klass, *config)
+    @middleware << register(klass, *config)
   end
   
   def player(klass=nil, *config)
@@ -30,7 +30,7 @@ class Builder
   end
   
   def call_middleware!
-    @middlewares.each{ |m| m.call(@player) }
+    @middleware.each{ |m| m.call(@player) }
   end
 
   private

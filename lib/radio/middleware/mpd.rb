@@ -4,7 +4,7 @@ require 'ostruct'
 class Radio
 class MPD
   include Logging
-  COMMANDS = %w{stop pause status clear}
+  COMMANDS = %w{stop pause clear}
   Ack = Struct.new(:error_id, :position, :command, :description)
   
   attr_reader :player
@@ -22,35 +22,6 @@ class MPD
       @player.register_event command do |data|
         self.send(command, *data)
       end
-    end
-    
-    # register sync method
-    @player.register_event :sync do
-      self.sync
-    end
-  end
-
-=begin
-  Sync checks the current status of MPD.
-  Is it paused? Playing? What is it playing?
-  It compares the expected to actual statuses and
-  makes changes required to keep them the same.
-=end
-
-  def sync
-    current_state  = status
-    expected_state = player.state
-    
-    case
-    when expected_state.playback != current_state.state
-      logger.debug 'update playback'
-      self.send expected_state.playback.to_sym
-    when !expected_state.content.files.include?(current_state.file)
-      logger.debug 'update content'
-      self.playlist = expected_state.content
-    else
-      logger.debug 'do nothing'
-      # update play position if resume
     end
   end
 
@@ -75,16 +46,15 @@ class MPD
     cmd("play #{song_number}")
   end
   
-  def status
-    @status = cmd("status")
+  def state
+    @state = cmd("status")
     playlist = cmd("playlistinfo")
     
     unless playlist == true
-      @status.merge!(playlist)
+      @state.merge!(playlist)
     end
     
-    # needs to be instance of Radio::State
-    OpenStruct.new(@status)
+    OpenStruct.new(@state)
   end
 
   private
