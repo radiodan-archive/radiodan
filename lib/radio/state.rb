@@ -26,13 +26,15 @@ class State
   end
 
   private
-  def set_state
+  def set_state    
     @content  = Radio::Content.find_playlist(@playlist)
     
     unless @content
-      err = "Cannot find playlist #{@playlist}"
-      logger.error err
-      raise err
+      if @playback == 'stopped'
+        @content = Radio::Content.new
+      else
+        logger.error "Cannot find playlist #{@playlist}"
+      end
     end
     
     logger.debug self
