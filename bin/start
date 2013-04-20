@@ -6,11 +6,14 @@ require './lib/radio'
 
 root = File.join(File.dirname(__FILE__), '..')
 
+radio1 = Radio::Content.find_playlist('bbc_radio_1')
+radio4 = Radio::Content.find_playlist('bbc_radio_4')
+
 radio = Radio.new do |builder|
   builder.adapter :MPD, :host => 'localhost', :port => 6600
-  builder.state   :playlist => :bbc_radio_4
+  builder.state   :content => radio4
   builder.use     :touch_file, :dir => File.join(root, 'tmp')
-  builder.use     :panic, :duration => 5, :playlist => :bbc_radio_1
+  builder.use     :panic, :duration => 5, :content => radio1
   # builder.use     :download_BBC_radio
 end
 

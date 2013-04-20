@@ -1,5 +1,4 @@
 * Add some goddamn tests, dammnit.
 * Remove DB persistence from Radio::Content
-* Pass Radio::Content objects directly into Radio::State
 * Generate gem
 * Move BBC Downloader into own radio player thing, using radio_dan as gem

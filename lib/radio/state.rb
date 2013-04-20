@@ -18,23 +18,7 @@ class State
 
   def initialize(config={})
     @playback = config[:playback] || 'play'
-    @playlist = config[:playlist]
-    set_state
-  end
-
-  private
-  def set_state    
-    @content  = Radio::Content.find_playlist(@playlist)
-    
-    unless @content
-      if @playback == 'stopped'
-        @content = Radio::Content.new
-      else
-        logger.error "Cannot find playlist #{@playlist}"
-      end
-    end
-    
-    logger.debug self
+    @content  = config[:content]
   end
 end
 end
