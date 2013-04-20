@@ -25,5 +25,13 @@ module EventBinding
   def events
     @events ||= Hash.new{ |h, k| h[k] = [] }
   end
+  
+  def method_missing(method, *args, &block)
+    if @events.include?(method)
+      trigger_event(method, *args)
+    else
+      super
+    end
+  end  
 end
 end

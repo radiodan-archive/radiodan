@@ -49,14 +49,5 @@ class Player
       adapter.send expected_state.playback
     end
   end
-
-  private
-  def method_missing(method, *args, &block)
-    if @events.include?(method)
-      trigger_event(method, *args)
-    else
-      super
-    end
-  end
 end
 end
