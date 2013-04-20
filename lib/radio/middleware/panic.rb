@@ -21,6 +21,8 @@ class Panic
   end
 
   def panic!
+    return true if panic?
+    
     @panic = true
     
     original_state = @player.state
