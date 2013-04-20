@@ -14,14 +14,5 @@
 =end
 
 class Radio
-class Content < Struct.new(:type, :name, :files, :mode, :song_number, :play_from)
-  private
-  def method_missing(method, *args, &block)
-    if files.respond_to?(method)
-      files.send(method, *args, &block)
-    else
-      super
-    end
-  end
-end
+class Content < Struct.new(:type, :name, :files, :mode, :song_number, :play_from); end
 end
