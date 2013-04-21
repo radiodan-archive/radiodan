@@ -2,27 +2,30 @@ require 'logger'
 
 class Radio
 module Logging
+  @output = '/dev/null'
+  
   def self.included(klass)
     klass.extend ClassMethods
+  end
+  
+  def self.output=(output)
+    @output = output
+  end
+  
+  def self.output
+    @output
   end
 
   def logger
     self.class.logger
   end
 
-  module ClassMethods
+  module ClassMethods    
+    @@logs = {}
+    
     def logger
-      @@logs ||= {}
-      
       unless @@logs.include? self.name
-        case ENV['RACK_ENV']
-        when 'test'
-          output = '/dev/null'
-        else
-          output = STDERR
-        end
-        
-        new_log = Logger.new(output)
+        new_log = Logger.new(Logging.output)
         new_log.progname = self.name
         
         @@logs[self.name] = new_log

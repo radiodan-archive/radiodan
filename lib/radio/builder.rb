@@ -1,6 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext/string'
 
+require 'radio/logging'
 require 'radio/player'
 require 'radio/state'
 
@@ -25,6 +26,10 @@ class Builder
   
   def state(options)
     @player.state = State.new(options) if @player
+  end
+  
+  def log(log)
+    Logging.output = log
   end
   
   def call_middleware!

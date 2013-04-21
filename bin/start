@@ -17,9 +17,10 @@ EM.synchrony do
   radio = Radio.new do |builder|
     builder.adapter :MPD, :host => 'localhost', :port => 6600
     builder.state   :content => radio4
+    builder.log     STDOUT
     builder.use     :touch_file, :dir => File.join(root, 'tmp')
     builder.use     :panic, :duration => 5, :content => radio1
   end
 
-  radio.start  
+  radio.start
 end
