@@ -37,10 +37,18 @@ class Radio
   end
   
   private
+  def respond_to?(method)
+    if player.respond_to? method
+      true
+    else
+      super
+    end
+  end
+  
   def method_missing(method, *args, &block)
-    begin
+    if player.respond_to? method
       player.send method, *args, &block
-    rescue NoMethodError
+    else
       super
     end
   end

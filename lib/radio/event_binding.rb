@@ -25,6 +25,14 @@ module EventBinding
     event_bindings.keys.sort
   end
   
+  def respond_to?(method)
+    if event_bindings.include?(method)
+      true
+    else
+      super
+    end
+  end
+  
   private
   def event_bindings
     @event_bindings ||= Hash.new{ |h, k| h[k] = [] }

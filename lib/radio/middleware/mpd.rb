@@ -66,6 +66,14 @@ class MPD
     OpenStruct.new(@state)
   end
 
+  def respond_to?(method)
+    if COMMANDS.include?(method.to_s)
+      true
+    else
+      super
+    end
+  end
+  
   private
   def method_missing(method, *args, &block)
     if COMMANDS.include?(method.to_s)
