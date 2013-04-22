@@ -40,7 +40,7 @@ file { '/etc/mpd.conf':
   require => Package['mpd'],
   notify => Service['mpd'],
   content => '
-    music_directory    "/vagrant/music"
+    music_directory    "/music"
     playlist_directory "/vagrant/playlists"
     db_file            "/var/lib/mpd/tag_cache"
     log_file           "/var/log/mpd/mpd.log"
