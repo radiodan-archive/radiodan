@@ -31,6 +31,10 @@ class Radio
       end
     end
   end
+
+  def player
+    @builder.player
+  end
   
   private
   def method_missing(method, *args, &block)
@@ -39,10 +43,6 @@ class Radio
     rescue NoMethodError
       super
     end
-  end
-  
-  def player
-    @builder.player
   end
   
   def trap_signals!
@@ -60,3 +60,4 @@ class Radio
     end
   end
 end
+
