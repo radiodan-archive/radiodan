@@ -6,12 +6,13 @@ class MPD
   include Logging
   COMMANDS = %w{stop pause clear play}
   Ack = Struct.new(:error_id, :position, :command, :description)
+  class AckError < Exception; end
   
   attr_reader :player
 
   def initialize(options={})
-    @port     = options[:port] || 6600
-    @host     = options[:host] || 'localhost'
+    @port = options[:port] || 6600
+    @host = options[:host] || 'localhost'
   end
   
   def player=(player)
@@ -47,7 +48,7 @@ class MPD
 
   def enqueue(playlist)
     playlist.files.each do |file|
-      cmd("add #{file}")
+      cmd(%Q{add "#{file}"})
     end
   end
 
@@ -121,17 +122,24 @@ class MPD
       # set value -> value
       Hash[*(response.split.*2)]
     else
+      response = response.split("\n")
       # remove first response: "OK"
-      response = response.split
       response.pop
-
-      Hash[*response.collect{|x| x.gsub(/:$/,'')}]
+      
+      split_response = response.collect do |r| 
+        split = r.split(':')
+        key   = split.shift
+        value = split.join(':')
+        [key.strip, value.strip]
+      end.flatten
+      
+      Hash[*split_response]
     end
   end
   
   def format_ack(ack)
     matches = /ACK \[(\d)+@(\d)+\] \{(.*)\} (.*)/.match(ack)    
-    AckError.new(*matches[1..-1])
+    AckError.new(*matches[1..-1].join)
   end
 end
 end
