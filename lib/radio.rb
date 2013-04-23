@@ -36,7 +36,6 @@ class Radio
     @builder.player
   end
   
-  private
   def respond_to?(method)
     if player.respond_to? method
       true
@@ -44,6 +43,8 @@ class Radio
       super
     end
   end
+
+  private
   
   def method_missing(method, *args, &block)
     if player.respond_to? method
