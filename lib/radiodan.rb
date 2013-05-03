@@ -22,7 +22,7 @@ class Radiodan
     EM.synchrony do
       trap_signals!
       
-      EM.next_tick do      
+      EM::Synchrony.next_tick do      
         @builder.call_middleware!
       end
 
