@@ -6,18 +6,19 @@ require 'radiodan/version'
 EM_VERSION = '~> 1.0.3'
 
 Gem::Specification.new do |gem|
-  gem.name          = "radiodan"
+  gem.name          = 'radiodan'
   gem.version       = Radiodan::VERSION
-  gem.authors       = ["Dan Nuttall"]
-  gem.email         = ["pixelblend@gmail.com"]
+  gem.authors       = ['Dan Nuttall']
+  gem.email         = ['pixelblend@gmail.com']
   gem.description   = %q{Web-enabled radio that plays to my schedule.}
   gem.summary       = %q{Web-enabled radio that plays to my schedule.}
-  gem.homepage      = "https://github.com/pixelblend/radiodan"
+  gem.homepage      = 'https://github.com/pixelblend/radiodan'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ["lib"]
+  gem.require_paths = ['lib']
+  gem.add_development_dependency 'rspec'
   gem.add_dependency 'eventmachine',     EM_VERSION
   gem.add_dependency 'em-synchrony',     EM_VERSION
   gem.add_dependency 'em-http-request',  EM_VERSION
