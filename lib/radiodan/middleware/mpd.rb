@@ -1,7 +1,7 @@
 require 'em-simple_telnet'
 require 'ostruct'
 
-class Radio
+class Radiodan
 class MPD
   include Logging
   COMMANDS = %w{stop pause clear play}

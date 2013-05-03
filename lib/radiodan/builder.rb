@@ -1,11 +1,11 @@
 require 'active_support'
 require 'active_support/core_ext/string'
 
-require 'radio/logging'
-require 'radio/player'
-require 'radio/state'
+require 'radiodan/logging'
+require 'radiodan/player'
+require 'radiodan/state'
 
-class Radio
+class Radiodan
 class Builder
   attr_reader :middleware, :player
     
@@ -41,7 +41,7 @@ class Builder
     klass = klass.to_s
 
     begin
-      radio_klass = Radio.const_get(klass.classify)
+      radio_klass = Radiodan.const_get(klass.classify)
     rescue NameError => e
       klass_path ||= false
       raise if klass_path

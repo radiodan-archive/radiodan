@@ -7,7 +7,7 @@ the corresponding event is triggered and
 the file deleted.
 =end
 
-class Radio
+class Radiodan
 class TouchFile
   include Logging  
   def initialize(config)

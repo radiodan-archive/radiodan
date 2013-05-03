@@ -13,6 +13,6 @@
     play_from: position to resume from (seconds)
 =end
 
-class Radio
+class Radiodan
 class Content < Struct.new(:type, :name, :files, :mode, :song_number, :play_from); end
 end

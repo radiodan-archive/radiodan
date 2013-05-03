@@ -1,4 +1,4 @@
-class Radio
+class Radiodan
 class Panic
   include Logging
   

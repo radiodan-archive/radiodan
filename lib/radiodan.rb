@@ -4,10 +4,11 @@ require 'em-synchrony'
 $: << './lib'
 
 require 'em_additions'
-require 'radio/logging'
-require 'radio/builder'
+require 'radiodan/logging'
+require 'radiodan/builder'
+require 'radiodan/version'
 
-class Radio
+class Radiodan
   include Logging
 
   def initialize(&blk)

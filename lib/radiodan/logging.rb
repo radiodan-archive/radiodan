@@ -1,6 +1,6 @@
 require 'logger'
 
-class Radio
+class Radiodan
 module Logging
   @output = '/dev/null'
   

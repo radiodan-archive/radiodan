@@ -1,6 +1,6 @@
-require 'radio/event_binding'
+require 'radiodan/event_binding'
 
-class Radio
+class Radiodan
 class Player
   include Logging
   include EventBinding

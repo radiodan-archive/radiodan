@@ -1,4 +1,4 @@
-class Radio  
+class Radiodan
 module EventBinding
   def register_event(event, &blk)
     logger.info "Registered event #{event}"

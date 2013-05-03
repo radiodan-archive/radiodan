@@ -9,9 +9,9 @@
   It can be updated by any of the stimulus objects.
 =end
 
-require 'radio/content'
+require 'radiodan/content'
 
-class Radio
+class Radiodan
 class State
   include Logging
   attr_reader :playback, :content
