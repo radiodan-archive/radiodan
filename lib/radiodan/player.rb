@@ -1,4 +1,5 @@
-require 'radiodan/event_binding'
+require 'event_binding'
+require 'logging'
 
 class Radiodan
 class Player
