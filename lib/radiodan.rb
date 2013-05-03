@@ -1,12 +1,12 @@
 require 'eventmachine'
 require 'em-synchrony'
 
-$: << './lib'
+$: << './lib/radiodan'
 
 require 'em_additions'
-require 'radiodan/logging'
-require 'radiodan/builder'
-require 'radiodan/version'
+require 'logging'
+require 'builder'
+require 'version'
 
 class Radiodan
   include Logging
