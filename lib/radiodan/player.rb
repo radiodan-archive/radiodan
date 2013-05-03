@@ -8,7 +8,7 @@ class Player
   attr_reader :adapter, :state
   
   def initialize
-    @state = State.new(:playback => 'stopped')
+    @state = State.new
   end
   
   def adapter=(adapter)

@@ -17,8 +17,8 @@ class State
   attr_reader :playback, :content
 
   def initialize(config={})
-    @playback = config[:playback] || 'play'
-    @content  = config[:content]
+    @playback = config[:playback] || 'stopped'
+    @content  = config[:content]  || Content.new
   end
 end
 end
