@@ -9,7 +9,7 @@
   It can be updated by any of the stimulus objects.
 =end
 
-require 'content'
+require 'playlist'
 require 'logging'
 
 class Radiodan
@@ -19,7 +19,7 @@ class State
 
   def initialize(config={})
     @playback = config[:playback] || 'stopped'
-    @content  = config[:content]  || Content.new
+    @content  = config[:content]  #|| Content.new
   end
 end
 end
