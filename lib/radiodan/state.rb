@@ -9,7 +9,8 @@
   It can be updated by any of the stimulus objects.
 =end
 
-require 'radiodan/content'
+require 'content'
+require 'logging'
 
 class Radiodan
 class State

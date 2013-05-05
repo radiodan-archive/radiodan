@@ -13,7 +13,7 @@ class Builder
     @middleware = []
     @player = Player.new
     
-    yield(self)
+    yield(self) if block_given?
   end
 
   def use(klass, *config)

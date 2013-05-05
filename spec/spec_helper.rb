@@ -2,7 +2,7 @@ require 'rspec/autorun'
 $: << File.expand_path('../../lib/radiodan', __FILE__)
 
 RSpec.configure do |config|
-  config.mock_with :mocha
+  #config.mock_with :mocha
 
   # Use color in STDOUT
   config.color_enabled = true

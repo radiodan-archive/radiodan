@@ -1,4 +1,5 @@
 require 'event_binding'
+require 'state'
 require 'logging'
 
 class Radiodan
@@ -38,16 +39,16 @@ class Player
     current_state  = adapter.state
     expected_state = state
 
-    # playlist
-    unless expected_state.content.files.include?(current_state.file)
-      logger.debug "Expected: #{expected_state.content.files.first} Got: #{current_state.file}"
-      trigger_event :playlist, expected_state.content
-    end
-
     # playback state
     unless expected_state.playback == current_state.state
       logger.debug "Expected: #{expected_state.playback} Got: #{current_state.state}"
       trigger_event expected_state.playback
+    end
+    
+    # playlist
+    unless expected_state.content.files.include?(current_state.file)
+      logger.debug "Expected: #{expected_state.content.files.first} Got: #{current_state.file}"
+      trigger_event :playlist, expected_state.content
     end
   end
 end
