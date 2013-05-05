@@ -20,11 +20,11 @@ class Builder
   end
   
   def adapter(klass, *config)
-    @player.adapter = register(klass, *config)
+    player.adapter = register(klass, *config)
   end
   
   def playlist(new_playlist)
-    @player.playlist = new_playlist if @player
+    player.playlist = new_playlist if player
   end
   
   def log(log)
@@ -32,7 +32,7 @@ class Builder
   end
   
   def call_middleware!
-    @middleware.each{ |m| m.call(@player) }
+    middleware.each{ |m| m.call(@player) }
   end
 
   private

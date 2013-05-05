@@ -29,4 +29,29 @@ describe Radiodan::Builder do
       b.adapter :mock_adapter, options
     end
   end
+
+  describe 'middleware' do
+    it 'creates an instance of middleware and stores internally' do
+      class Radiodan::MockMiddle; end
+
+      options, middleware = mock, mock
+      Radiodan::MockMiddle.should_receive(:new).with(options).and_return(middleware)
+
+      builder = Radiodan::Builder.new do |b|
+        b.use :mock_middle, options
+      end
+      
+      builder.middleware.size.should == 1
+      builder.middleware.should include middleware
+    end
+
+    it 'executes middleware, passing player instance' do
+      middleware = stub
+      middleware.should_receive(:call).with(@player)
+
+      builder = Radiodan::Builder.new
+      builder.should_receive(:middleware).and_return([middleware])
+      builder.call_middleware!
+    end
+  end
 end
