@@ -1,17 +1,12 @@
-require 'event_binding'
-require 'state'
 require 'logging'
+require 'event_binding'
 
 class Radiodan
 class Player
   include Logging
   include EventBinding
   
-  attr_reader :adapter, :state
-  
-  def initialize
-    @state = State.new
-  end
+  attr_reader :adapter, :playlist
   
   def adapter=(adapter)
     @adapter = adapter
@@ -22,11 +17,11 @@ class Player
     !adapter.nil?
   end
   
-  def state=(new_state)
-    @state = new_state
-    trigger_event(:state, @state)
+  def playlist=(new_playlist)
+    @playlist = new_playlist
+    trigger_event(:playlist, @playlist)
     
-    @state
+    @playlist
   end
   
 =begin
@@ -36,10 +31,13 @@ class Player
   makes changes required to keep them the same.
 =end
   def sync
+    return false unless adapter?
+
     current_state  = adapter.state
     expected_state = state
 
     # playback state
+    # this should only run when a new playlist is set??
     unless expected_state.playback == current_state.state
       logger.debug "Expected: #{expected_state.playback} Got: #{current_state.state}"
       trigger_event expected_state.playback
