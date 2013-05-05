@@ -1,9 +1,8 @@
 require 'active_support'
 require 'active_support/core_ext/string'
 
-require 'radiodan/logging'
-require 'radiodan/player'
-require 'radiodan/state'
+require 'logging'
+require 'player'
 
 class Radiodan
 class Builder
@@ -24,8 +23,8 @@ class Builder
     @player.adapter = register(klass, *config)
   end
   
-  def state(options)
-    @player.state = State.new(options) if @player
+  def playlist(new_playlist)
+    @player.playlist = new_playlist if @player
   end
   
   def log(log)
