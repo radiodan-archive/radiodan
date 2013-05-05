@@ -18,10 +18,13 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
-  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rspec',       '~> 2.13.0'
+  gem.add_development_dependency 'guard-rspec', '~> 2.6.0'
+  gem.add_development_dependency 'terminal-notifier-guard', '~> 1.5.0'
   gem.add_dependency 'eventmachine',     EM_VERSION
   gem.add_dependency 'em-synchrony',     EM_VERSION
   gem.add_dependency 'em-http-request',  EM_VERSION
   gem.add_dependency 'em-simple_telnet', '~> 0.0.6'
   gem.add_dependency 'active_support',   '~> 3.0.0'
+  gem.add_dependency 'i18n',             '~> 0.6.4'
 end
