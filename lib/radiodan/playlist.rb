@@ -70,7 +70,11 @@ class Playlist
   end
 
   def position=(new_position)
-    position = Integer(new_position)
+    begin
+      position = Integer(new_position)
+    rescue ArgumentError
+      raise PositionError
+    end
 
     if position > content.size
       raise PositionError

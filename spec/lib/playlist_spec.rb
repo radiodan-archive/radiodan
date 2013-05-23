@@ -76,6 +76,11 @@ describe Radiodan::Playlist do
       subject.position = '1'
       subject.position.should == 1
     end
+
+    it 'raises when it cannot be coerced into integer' do
+      expect { subject.position = 'dave' }.to raise_error subject.class::PositionError
+      subject.position.should == 1
+    end
   end
 
   describe 'current item playing' do
