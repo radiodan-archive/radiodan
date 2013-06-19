@@ -28,13 +28,13 @@ describe Radiodan::StateSync do
     it 'catches non-matching state' do
       state_sync.state.stub(:state => :paused)
 
-      state_sync.sync?.should eql false
-      state_sync.errors.should eql [:state]
+      state_sync.sync?.should  == false
+      state_sync.errors.should == [:state]
     end
     
     it 'allows matching state' do
       state_sync.state.stub(:state => :playing)
-      state_sync.sync?.should eql true
+      state_sync.sync?.should == true
       state_sync.errors.should be_empty
     end
   end
@@ -47,13 +47,13 @@ describe Radiodan::StateSync do
     it 'catches non-matching state' do
       state_sync.state.stub(:mode => :resume)
 
-      state_sync.sync?.should eql false
-      state_sync.errors.should eql [:mode]
+      state_sync.sync?.should  == false
+      state_sync.errors.should == [:mode]
     end
     
     it 'allows matching state' do
       state_sync.state.stub(:mode => :random)
-      state_sync.sync?.should eql true
+      state_sync.sync?.should == true
       state_sync.errors.should be_empty
     end
   end
@@ -66,13 +66,13 @@ describe Radiodan::StateSync do
     it 'catches non-matching state' do
       state_sync.state.stub(:content => [1,4])
 
-      state_sync.sync?.should eql false
-      state_sync.errors.should eql [:playlist]
+      state_sync.sync?.should  == false
+      state_sync.errors.should == [:playlist]
     end
     
     it 'allows matching state' do
       state_sync.state.stub(:content => [1,2,3,4])
-      state_sync.sync?.should eql true
+      state_sync.sync?.should == true
       state_sync.errors.should be_empty
     end
   end
@@ -80,8 +80,8 @@ describe Radiodan::StateSync do
   context 'error messages' do
     it 'captures multiple errors' do
       state_sync.playlist.stub(:content => [1], :mode => :random)
-      state_sync.sync?.should eql false
-      state_sync.errors.should eql [:mode, :playlist]
+      state_sync.sync?.should  == false
+      state_sync.errors.should == [:mode, :playlist]
     end
   end
 end
