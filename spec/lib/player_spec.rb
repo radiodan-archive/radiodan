@@ -28,11 +28,51 @@ describe Radiodan::Player do
 
   context 'syncs' do
     before :each do
+      subject.playlist = stub.as_null_object
+      subject.adapter  = stub.as_null_object
     end
-
+    
     it 'returns false unless adapter is set' do
-      subject.adapter.should be nil
+      subject.stub(:adapter).and_return(nil)
       subject.sync.should == false
+    end
+    
+    it 'returns true if expected and actual state are the same' do
+      Radiodan::StateSync.any_instance.stub(:sync?).and_return(true)
+      
+      subject.sync.should == true
+    end
+    
+    context 'sync error triggers events' do
+      before :each do
+        Radiodan::StateSync.any_instance.stub(:sync?).and_return(false)
+      end
+      
+      it 'playback state' do
+        Radiodan::StateSync.any_instance.stub(:errors).and_return([:state])
+        subject.playlist.stub(:state => :playing)
+      
+        subject.should_receive(:trigger_event).with(:play_state, :playing)
+        subject.sync.should == false
+      end
+      
+      it 'playback mode' do
+        Radiodan::StateSync.any_instance.stub(:errors).and_return([:mode])
+        subject.playlist.stub(:mode => :random)
+      
+        subject.should_receive(:trigger_event).with(:play_mode, :random)
+        subject.sync.should == false
+      end
+      
+      it 'playlist' do
+        Radiodan::StateSync.any_instance.stub(:errors).and_return([:playlist])
+        
+        playlist_content = stub
+        subject.playlist.stub(:content => playlist_content)
+      
+        subject.should_receive(:trigger_event).with(:playlist, playlist_content)
+        subject.sync.should == false
+      end      
     end
   end
 end

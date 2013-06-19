@@ -1,5 +1,6 @@
 require 'logging'
 require 'event_binding'
+require 'state_sync'
 
 class Radiodan
 class Player
@@ -34,19 +35,32 @@ class Player
     return false unless adapter?
 
     current_state  = adapter.state
-    expected_state = state
+    expected_state = playlist
 
-    # playback state
-    # this should only run when a new playlist is set??
-    unless expected_state.playback == current_state.state
-      logger.debug "Expected: #{expected_state.playback} Got: #{current_state.state}"
-      trigger_event expected_state.playback
-    end
+    state = Radiodan::StateSync.new expected_state, current_state
     
-    # playlist
-    unless expected_state.content.files.include?(current_state.file)
-      logger.debug "Expected: #{expected_state.content.files.first} Got: #{current_state.file}"
-      trigger_event :playlist, expected_state.content
+    if state.sync?
+      true
+    else
+      # playback state
+      # this should only run when a new playlist is set??
+      if state.errors.include? :state
+        logger.debug "Expected: #{expected_state.state} Got: #{current_state.state}"
+        trigger_event :play_state, expected_state.state
+      end
+      
+      if state.errors.include? :mode
+        logger.debug "Expected: #{expected_state.mode} Got: #{current_state.mode}"
+        trigger_event :play_mode, expected_state.mode
+      end
+      
+      # playlist
+      if state.errors.include? :playlist
+        logger.debug "Expected: #{expected_state.current} Got: #{current_state.file}"
+        trigger_event :playlist, expected_state.content
+      end
+      
+      false
     end
   end
 end
