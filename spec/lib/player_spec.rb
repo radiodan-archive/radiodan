@@ -34,8 +34,5 @@ describe Radiodan::Player do
       subject.adapter.should be nil
       subject.sync.should == false
     end
-
-    it 'tracks playback state'
-    it 'tracks playlist content'
   end
 end
