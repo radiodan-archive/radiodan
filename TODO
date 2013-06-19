@@ -1,8 +1,6 @@
 * Player
   - explicitly set playlist when a new event is triggered, don't attempt to sync
-  - change #sync to use state_sync object
   - #sync reads state_sync methods
-    * #sync? 
     * #errors to determine which events to trigger
 
 * MPD Adapter
