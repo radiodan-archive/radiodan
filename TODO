@@ -1,1 +1,10 @@
-* Add some goddamn tests, dammnit.
+* Player
+  - explicitly set playlist when a new event is triggered, don't attempt to sync
+  - change #sync to use state_sync object
+  - #sync reads state_sync methods
+    * #sync? 
+    * #errors to determine which events to trigger
+
+* MPD Adapter
+  - Parse state into a player_state object, don't use openstruct anymore
+    (User state_sync spec as guide)
