@@ -2,7 +2,25 @@
   - explicitly set playlist when a new event is triggered, don't attempt to sync
   - #sync reads state_sync methods
     * #errors to determine which events to trigger
-
 * MPD Adapter
   - Parse state into a player_state object, don't use openstruct anymore
     (User state_sync spec as guide)
+* StateSync
+  - Attributes to sync:
+    + Play mode
+    + Contents of playlist
+    + Position in playlist
+    + Seek position for current item in playlist
+  - Differentiate when a playlist 
+    + is new (make this match exactly) 
+    + is not (keep in bounds of acceptability)
+* Player keeps useful information about current state.
+  - PlayerState class
+  - attributes:
+    + play mode
+    + play / stopped / paused
+    + playlist
+    + current / now playing
+    + position in current track
+    + metadata of current track
+

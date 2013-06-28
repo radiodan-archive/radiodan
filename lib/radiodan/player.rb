@@ -21,6 +21,7 @@ class Player
   def playlist=(new_playlist)
     @playlist = new_playlist
     trigger_event(:playlist, @playlist)
+    # run sync to explicitly conform to new playlist?
     
     @playlist
   end
