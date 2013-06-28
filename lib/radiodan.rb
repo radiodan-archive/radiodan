@@ -1,7 +1,7 @@
 require 'eventmachine'
 require 'em-synchrony'
 
-$: << './lib/radiodan'
+$: << File.dirname(__FILE__)+'/radiodan/'
 
 require 'em_additions'
 require 'logging'
