@@ -4,7 +4,7 @@
     * #errors to determine which events to trigger
 * MPD Adapter
   - Figure out a way of testing interface with playlist object
-* StateSync
+* PlaylistSync
   - Attributes to sync:
     + Position in playlist
     + Seek position for current item in playlist
