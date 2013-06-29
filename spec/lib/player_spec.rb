@@ -70,7 +70,7 @@ describe Radiodan::Player do
         playlist_content = stub
         subject.playlist.stub(:content => playlist_content)
       
-        subject.should_receive(:trigger_event).with(:playlist, playlist_content)
+        subject.should_receive(:trigger_event).with(:playlist, subject.playlist)
         subject.sync.should == false
       end      
     end

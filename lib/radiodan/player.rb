@@ -58,7 +58,7 @@ class Player
       # playlist
       if state.errors.include? :playlist
         logger.debug "Expected: #{expected_state.current} Got: #{current_state.file}"
-        trigger_event :playlist, expected_state.content
+        trigger_event :playlist, expected_state
       end
       
       false
