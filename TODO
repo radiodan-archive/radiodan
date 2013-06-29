@@ -4,14 +4,9 @@
     + #errors to determine which events to trigger
     + Know when to restart playlists that repeat
     + Resume playlists from last position
+* Search for music in library, returns playlist / array of tracks
 * MPD Adapter
   - Figure out a way of testing interface with playlist object
-* PlaylistSync
-  - Attributes to sync:
-    + Position in playlist
-    + Seek position for current item in playlist
-  - Differentiate when a playlist 
-    + is new (make this match exactly) 
-    + is not (keep in bounds of acceptability)
 * Panic Mode
   - Add tests
+* Remove eventmachine?
