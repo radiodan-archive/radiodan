@@ -5,7 +5,7 @@ class Panic
   def initialize(config)
     @panic      = false
     @timeout    = config.delete(:duration).to_i
-    @playlist   = Playlist.new(config)
+    @playlist   = config[:playlist]
   end
   
   def call(player)
@@ -37,7 +37,7 @@ class Panic
     @panic
   end
 
-  def return_to_state(state)
+  def return_to_state(playlist)
     logger.debug "calming"
     @panic = false
     @player.playlist = playlist
