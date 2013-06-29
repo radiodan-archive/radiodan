@@ -1,6 +1,6 @@
 require 'em-simple_telnet'
-require 'ostruct'
-require 'playlist_parser'
+
+require_relative './mpd/playlist_parser'
 
 class Radiodan
 class MPD
@@ -60,8 +60,6 @@ class MPD
   def playlist
     status = cmd("status")
     playlist = cmd("playlistinfo")
-    
-    p playlist
     
     PlaylistParser.parse(status, playlist)
   end

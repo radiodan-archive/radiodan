@@ -1,12 +1,12 @@
 require 'playlist'
 
-class Radiodan
+class Radiodan::MPD
 module PlaylistParser
   def self.parse(attributes={}, playlist={})
     options           = parse_attributes(attributes)
     options[:content] = parse_playlist(playlist)
     
-    Playlist.new(options)
+    Radiodan::Playlist.new(options)
   end
 
   private
@@ -31,4 +31,3 @@ module PlaylistParser
   end
 end
 end
-

@@ -16,11 +16,11 @@ class Builder
   end
 
   def use(klass, *config)
-    @middleware << register(klass, *config)
+    @middleware << register(klass, 'middleware', *config)
   end
   
   def adapter(klass, *config)
-    player.adapter = register(klass, *config)
+    player.adapter = register(klass, 'adapter', *config)
   end
   
   def playlist(new_playlist)
@@ -36,7 +36,7 @@ class Builder
   end
 
   private
-  def register(klass, *config)
+  def register(klass, klass_type, *config)
     klass = klass.to_s
 
     begin
@@ -46,12 +46,12 @@ class Builder
       raise if klass_path
       
       # attempt to require from middleware
-      klass_path = Pathname.new("#{File.dirname(__FILE__)}/middleware/#{klass.underscore}.rb")
+      klass_path = Pathname.new(File.join(File.dirname(__FILE__), klass_type, "#{klass.underscore}.rb"))
       require klass_path if klass_path.exist?
-      
+
       retry
     end
-
+    
     if config.empty?
       radio_klass.new
     else

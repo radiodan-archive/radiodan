@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'playlist_parser'
+require 'adapter/mpd/playlist_parser'
 
-describe Radiodan::PlaylistParser do
+describe Radiodan::MPD::PlaylistParser do
   before :all do
     @attributes = { "volume"=>"57", "repeat"=>"1", "random"=>"1", "single"=>"0", "consume"=>"0", "playlist"=>"3", 
                     "playlistlength"=>"1", "xfade"=>"0", "mixrampdb"=>"0.000000", "mixrampdelay"=>"nan", "state"=>"pause", 
