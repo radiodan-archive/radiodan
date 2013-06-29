@@ -9,12 +9,12 @@ describe Radiodan::MPD::PlaylistParser do
   end
   
   it 'creates matching playlist object' do
-    playlist = subject.parse(@attributes, ['1'])
+    playlist = subject.parse(@attributes, [file: '1'])
     
     playlist.state.should     == :pause
     playlist.mode.should      == :random
     playlist.repeat.should    == true
-    playlist.tracks.should    == ['1']
+    playlist.tracks.should    == [file: '1']
     playlist.position.should  == 0
     playlist.seek.should      == 214.599
     playlist.volume.should    == 57

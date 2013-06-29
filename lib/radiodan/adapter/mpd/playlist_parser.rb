@@ -1,12 +1,13 @@
 require 'playlist'
 
-class Radiodan::MPD
+class Radiodan
+class MPD
 module PlaylistParser
   def self.parse(attributes={}, tracks=[])
     options          = parse_attributes(attributes)
-    options[:tracks] = tracks
+    options[:tracks] = parse_tracks(tracks)
     
-    Radiodan::Playlist.new(options)
+    Playlist.new(options)
   end
 
   private
@@ -21,9 +22,15 @@ module PlaylistParser
     
     options
   end
+  
+  def self.parse_tracks(tracks)
+    p tracks.first.inspect
+    tracks.collect{ |t| Track.new(t) }
+  end
 
   def self.parse_mode(attributes)
     attributes['random'] == '1' ? :random : :sequential
   end
+end
 end
 end

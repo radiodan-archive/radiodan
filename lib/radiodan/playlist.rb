@@ -14,6 +14,7 @@
     seek: position to resume from (seconds)
 =end
 require 'forwardable'
+require 'track'
 
 class Radiodan
 class Playlist
@@ -70,7 +71,7 @@ class Playlist
 
   def tracks=(new_tracks)
     if new_tracks.is_a?(String)
-      new_tracks = [{file: new_tracks}]
+      new_tracks = Track.new(file: new_tracks)
     end
     
     @tracks = Array(new_tracks)
