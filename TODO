@@ -5,6 +5,7 @@
 * MPD Adapter
   - Parse state into a player_state object, don't use openstruct anymore
     (User state_sync spec as guide)
+  - Figure out a way of testing interface with playlist object
 * StateSync
   - Attributes to sync:
     + Play mode
@@ -23,4 +24,5 @@
     + current / now playing
     + position in current track
     + metadata of current track
-
+* Panic Mode
+  - Add tests
