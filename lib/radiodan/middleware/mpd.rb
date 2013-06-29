@@ -47,7 +47,7 @@ class MPD
   end
 
   def enqueue(playlist)
-    playlist.files.each do |file|
+    playlist.content.each do |file|
       cmd(%Q{add "#{file}"})
     end
   end
