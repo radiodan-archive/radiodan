@@ -1,7 +1,9 @@
 * Player
   - explicitly set playlist when a new event is triggered, don't attempt to sync
-  - #sync reads state_sync methods
-    * #errors to determine which events to trigger
+  - #sync reads playlist_sync methods
+    + #errors to determine which events to trigger
+    + Know when to restart playlists that repeat
+    + Resume playlists from last position
 * MPD Adapter
   - Figure out a way of testing interface with playlist object
 * PlaylistSync
