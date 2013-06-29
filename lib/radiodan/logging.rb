@@ -2,18 +2,18 @@ require 'logger'
 
 class Radiodan
 module Logging
-  @output = '/dev/null'
+  @@output = '/dev/null'
   
   def self.included(klass)
     klass.extend ClassMethods
   end
   
   def self.output=(output)
-    @output = output
+    @@output = output
   end
   
   def self.output
-    @output
+    @@output
   end
 
   def logger

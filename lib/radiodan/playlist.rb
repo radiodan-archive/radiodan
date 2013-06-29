@@ -20,25 +20,24 @@ class Playlist
   class ModeError < Exception; end
   class PositionError < Exception; end
   class SeekError < Exception; end
+  class VolumeError < Exception; end
 
-  STATES = [:stopped, :playing, :paused]
-  MODES  = [:sequential, :random, :resume]
-  attr_reader :state, :mode, :content, :position, :seek
+  STATES = [:play, :stop, :pause]
+  MODES  = [:sequential, :resume, :random]
+  attr_reader :state, :mode, :repeat, :content, :position, :seek, :volume
 
   def initialize(options={})
     self.state    = options.fetch(:state, STATES.first)
     self.mode     = options.fetch(:mode, MODES.first)
+    self.repeat   = options.fetch(:repeat, false)
     self.content  = options.fetch(:content, Array.new)
-    self.position = options.fetch(:position, (content.empty? ? 0 : 1))
-    self.seek     = options.fetch(:seek, 0)
+    self.position = options.fetch(:position, 0)
+    self.seek     = options.fetch(:seek, 0.0)
+    self.volume   = options.fetch(:volume, 100)
   end
 
   def current
-    if position == 0
-      nil
-    else
-      content[position-1]
-    end
+    content[position]
   end
 
   def state=(new_state)
@@ -60,24 +59,22 @@ class Playlist
       raise ModeError
     end
   end
+  
+  def repeat=(new_repeat)
+    @repeat = (new_repeat === true)
+  end
 
   def content=(new_content)
     @content = Array(new_content)
-
-    if self.position == 0 and not @content.empty?
-      self.position = 1
-    end
+    @position = 0
   end
 
   def position=(new_position)
     begin
       position = Integer(new_position)
+      raise ArgumentError if position > content.size
     rescue ArgumentError
-      raise PositionError
-    end
-
-    if position > content.size
-      raise PositionError
+      raise PositionError, "Item #{new_position} invalid for playlist size #{content.size}"
     end
 
     @position = position
@@ -85,10 +82,22 @@ class Playlist
 
   def seek=(new_seek)
     begin
-      @seek = Integer(new_seek)
+      @seek = Float(new_seek)
     rescue ArgumentError
-      raise SeekError
+      raise SeekError, "#{new_seek} invalid"
     end
+  end
+  
+  def volume=(new_volume)
+    begin
+      new_volume = Integer(new_volume)
+      
+      raise ArgumentError if new_volume > 100 || new_volume < 0
+    rescue ArgumentError
+      raise VolumeError, "#{new_volume} not an integer 0-100"
+    end
+    
+    @volume = new_volume
   end
 end
 end

@@ -1,5 +1,6 @@
 require 'em-simple_telnet'
 require 'ostruct'
+require 'playlist_parser'
 
 class Radiodan
 class MPD
@@ -56,15 +57,13 @@ class MPD
     cmd("play #{song_number}")
   end
   
-  def state
-    @state = cmd("status")
+  def playlist
+    status = cmd("status")
     playlist = cmd("playlistinfo")
     
-    unless playlist == true
-      @state.merge!(playlist)
-    end
+    p playlist
     
-    OpenStruct.new(@state)
+    PlaylistParser.parse(status, playlist)
   end
 
   def respond_to?(method)
@@ -98,7 +97,7 @@ class MPD
       end
     end
     
-    format_response(response)
+    formatted_response = format_response(response)
   end
   
   def connect(&blk)

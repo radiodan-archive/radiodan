@@ -3,12 +3,16 @@ require 'playlist'
 
 describe Radiodan::Playlist do
   describe 'default attributes' do
-    it 'has a state of stopped' do
-      subject.state.should == :stopped
+    it 'has a state of playing' do
+      subject.state.should == :play
     end
 
     it 'has a playback mode of sequential' do
       subject.mode.should == :sequential
+    end
+    
+    it 'has a repeat value of false' do
+      subject.repeat.should == false
     end
 
     it 'has an empty array of content' do
@@ -19,15 +23,19 @@ describe Radiodan::Playlist do
       subject.position.should == 0
     end
     
-    it 'has a default seek of 0' do
-      subject.seek.should == 0
+    it 'has a default seek of 0.0' do
+      subject.seek.should == 0.0
+    end
+    
+    it 'has a default volume of 100%' do
+      subject.volume.should == 100
     end
   end
 
   describe 'playback state' do
     it 'can be set' do
-      subject.state = :playing
-      subject.state.should == :playing
+      subject.state = :play
+      subject.state.should == :play
     end
 
     it 'cannot be set to an unknown state' do
@@ -47,13 +55,28 @@ describe Radiodan::Playlist do
       expect { subject.mode = :inverted }.to raise_error subject.class::ModeError
     end
   end
+  
+  describe 'repeat mode' do
+    it 'can be set' do
+      subject.repeat = true
+      subject.repeat.should == true
+    end
+    
+    it 'is only set to true when passed TrueClass' do
+      subject.repeat = 1
+      subject.repeat.should == false
+      
+      subject.repeat = 'true'
+      subject.repeat.should == false
+    end
+  end
 
   describe 'content' do
     it 'creates an array of content' do
       subject.content = 'x.mp3'
       subject.content.size.should  == 1
       subject.content.first.should == 'x.mp3'
-      subject.position.should == 1
+      subject.position.should == 0
     end
 
     it 'accepts an array of content' do
@@ -79,7 +102,7 @@ describe Radiodan::Playlist do
 
     it 'raises when it cannot be coerced into integer' do
       expect { subject.position = 'dave' }.to raise_error subject.class::PositionError
-      subject.position.should == 1
+      subject.position.should == 0
     end
   end
 
@@ -89,23 +112,36 @@ describe Radiodan::Playlist do
     end
 
     it 'returns item from current position' do
-      subject.position.should == 1
+      subject.position.should == 0
       subject.current.should  == '1.mp3'
     end 
   end
 
   describe 'seek time' do
-    it 'is expressed as a integer' do
+    it 'is expressed as a float' do
       subject.seek = '22'
-      subject.seek.should == 22
+      subject.seek.should == 22.0
 
       subject.seek = 22.2
-      subject.seek.should == 22
+      subject.seek.should == 22.2
     end
 
-    it 'raises when it cannot be coerced into integer' do
+    it 'raises when it cannot be coerced into a float' do
       expect { subject.seek = 'dave' }.to raise_error subject.class::SeekError
-      subject.seek.should == 0
+      subject.seek.should == 0.0
+    end
+  end
+  
+  describe 'volume' do
+    it 'is expressed as an integer' do
+      subject.volume = '24'
+      subject.volume.should == 24
+    end
+    
+    it 'has a legal range of 0-100' do
+      expect { subject.volume = '999' }.to raise_error subject.class::VolumeError
+      expect { subject.volume = -29 }.to raise_error subject.class::VolumeError
+      subject.volume.should == 100
     end
   end
 end

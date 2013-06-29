@@ -35,11 +35,11 @@ class Player
   def sync
     return false unless adapter?
 
-    current_state  = adapter.state
+    current_state  = adapter.playlist
     expected_state = playlist
 
     state = Radiodan::StateSync.new expected_state, current_state
-    
+
     if state.sync?
       true
     else
@@ -57,7 +57,7 @@ class Player
       
       # playlist
       if state.errors.include? :playlist
-        logger.debug "Expected: #{expected_state.current} Got: #{current_state.file}"
+        logger.debug "Expected: #{expected_state.current} Got: #{current_state.current}"
         trigger_event :playlist, expected_state
       end
       
