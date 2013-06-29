@@ -2,9 +2,9 @@ require 'playlist'
 
 class Radiodan::MPD
 module PlaylistParser
-  def self.parse(attributes={}, playlist={})
+  def self.parse(attributes={}, playlist=[])
     options           = parse_attributes(attributes)
-    options[:content] = parse_playlist(playlist)
+    options[:content] = playlist
     
     Radiodan::Playlist.new(options)
   end
@@ -24,10 +24,6 @@ module PlaylistParser
 
   def self.parse_mode(attributes)
     attributes['random'] == '1' ? :random : :sequential
-  end
-  
-  def self.parse_playlist(playlist_hash)
-    playlist_hash
   end
 end
 end
