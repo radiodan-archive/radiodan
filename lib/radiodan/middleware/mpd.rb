@@ -40,7 +40,7 @@ class MPD
     clear
 
     if enqueue playlist
-      play playlist.song_number
+      play playlist.position
     else
       raise "Cannot load playlist #{playlist}" 
     end
