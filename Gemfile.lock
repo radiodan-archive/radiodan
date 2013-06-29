@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    radiodan (0.0.2)
+    radiodan (0.0.3)
       active_support (~> 3.0.0)
       em-http-request (~> 1.0.3)
       em-simple_telnet (~> 0.0.6)
