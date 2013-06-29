@@ -24,7 +24,6 @@ module PlaylistParser
   end
   
   def self.parse_tracks(tracks)
-    p tracks.first.inspect
     tracks.collect{ |t| Track.new(t) }
   end
 

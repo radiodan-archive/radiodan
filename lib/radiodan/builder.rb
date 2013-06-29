@@ -1,5 +1,6 @@
 require 'active_support'
 require 'active_support/core_ext/string'
+require 'pathname'
 
 require 'logging'
 require 'player'
