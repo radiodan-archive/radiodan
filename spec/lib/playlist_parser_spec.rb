@@ -14,7 +14,7 @@ describe Radiodan::MPD::PlaylistParser do
     playlist.state.should     == :pause
     playlist.mode.should      == :random
     playlist.repeat.should    == true
-    playlist.content.should   == ['1']
+    playlist.tracks.should    == ['1']
     playlist.position.should  == 0
     playlist.seek.should      == 214.599
     playlist.volume.should    == 57

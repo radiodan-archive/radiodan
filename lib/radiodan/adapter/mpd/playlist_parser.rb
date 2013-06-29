@@ -2,9 +2,9 @@ require 'playlist'
 
 class Radiodan::MPD
 module PlaylistParser
-  def self.parse(attributes={}, playlist=[])
-    options           = parse_attributes(attributes)
-    options[:content] = playlist
+  def self.parse(attributes={}, tracks=[])
+    options          = parse_attributes(attributes)
+    options[:tracks] = tracks
     
     Radiodan::Playlist.new(options)
   end

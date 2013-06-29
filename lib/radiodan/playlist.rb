@@ -9,10 +9,11 @@
     name: name of playlist (optional?)
     state: playing, stopped, paused
     mode: sequential, random, resume
-    content: an array of URIs to play
+    tracks: an array of URIs to play
     position: song to resume play
     seek: position to resume from (seconds)
 =end
+require 'forwardable'
 
 class Radiodan
 class Playlist
@@ -22,22 +23,25 @@ class Playlist
   class SeekError < Exception; end
   class VolumeError < Exception; end
 
+  extend  Forwardable
+  
   STATES = [:play, :stop, :pause]
   MODES  = [:sequential, :resume, :random]
-  attr_reader :state, :mode, :repeat, :content, :position, :seek, :volume
+  attr_reader :state, :mode, :repeat, :tracks, :position, :seek, :volume
+  def_delegators :@tracks, :size
 
   def initialize(options={})
     self.state    = options.fetch(:state, STATES.first)
     self.mode     = options.fetch(:mode, MODES.first)
     self.repeat   = options.fetch(:repeat, false)
-    self.content  = options.fetch(:content, Array.new)
+    self.tracks   = options.fetch(:tracks, Array.new)
     self.position = options.fetch(:position, 0)
     self.seek     = options.fetch(:seek, 0.0)
     self.volume   = options.fetch(:volume, 100)
   end
 
   def current
-    content[position]
+    tracks[position]
   end
 
   def state=(new_state)
@@ -64,17 +68,21 @@ class Playlist
     @repeat = (new_repeat === true)
   end
 
-  def content=(new_content)
-    @content = Array(new_content)
+  def tracks=(new_tracks)
+    if new_tracks.is_a?(String)
+      new_tracks = [{file: new_tracks}]
+    end
+    
+    @tracks = Array(new_tracks)
     @position = 0
   end
 
   def position=(new_position)
     begin
       position = Integer(new_position)
-      raise ArgumentError if position > content.size
+      raise ArgumentError if position > tracks.size
     rescue ArgumentError
-      raise PositionError, "Item #{new_position} invalid for playlist size #{content.size}"
+      raise PositionError, "Item #{new_position} invalid for playlist size #{tracks.size}"
     end
 
     @position = position

@@ -15,8 +15,8 @@ describe Radiodan::Playlist do
       subject.repeat.should == false
     end
 
-    it 'has an empty array of content' do
-      subject.content.should == Array.new
+    it 'has an empty array of tracks' do
+      subject.tracks.should == Array.new
     end
 
     it 'has a starting position of zero' do
@@ -71,23 +71,23 @@ describe Radiodan::Playlist do
     end
   end
 
-  describe 'content' do
-    it 'creates an array of content' do
-      subject.content = 'x.mp3'
-      subject.content.size.should  == 1
-      subject.content.first.should == 'x.mp3'
+  describe 'tracks' do
+    it 'creates an array of tracks' do
+      subject.tracks = 'x.mp3'
+      subject.tracks.size.should  == 1
+      subject.tracks.first.should == {file: 'x.mp3'}
       subject.position.should == 0
     end
 
-    it 'accepts an array of content' do
-      subject.content = '1.mp3', '2.mp3'
-      subject.content.size.should == 2
+    it 'accepts an array of tracks' do
+      subject.tracks = '1.mp3', '2.mp3'
+      subject.tracks.size.should == 2
     end
   end
 
   describe 'starting position' do
     before :each do
-      subject.content = 'a.mp3'
+      subject.tracks = 'a.mp3'
     end
 
     it 'should not be larger than the size of the playlist' do
@@ -108,7 +108,7 @@ describe Radiodan::Playlist do
 
   describe 'current item playing' do
     before :each do
-      subject.content = %w{1.mp3 2.mp3}
+      subject.tracks = %w{1.mp3 2.mp3}
     end
 
     it 'returns item from current position' do

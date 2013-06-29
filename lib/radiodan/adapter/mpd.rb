@@ -8,9 +8,9 @@ class MPD
   include Logging
   extend  Forwardable
   
-  def_delegator :@connection, :cmd, :cmd
+  def_delegators :@connection, :cmd
 
-  COMMANDS = %w{stop pause clear play}  
+  COMMANDS = %w{stop pause clear play next previous}  
   attr_reader :player
 
   def initialize(options={})
@@ -49,8 +49,8 @@ class MPD
   end
 
   def enqueue(playlist)
-    playlist.content.each do |file|
-      cmd(%Q{add "#{file}"})
+    playlist.tracks.each do |track|
+      cmd(%Q{add "#{track[:file]}"})
     end
   end
 
@@ -60,9 +60,9 @@ class MPD
   
   def playlist
     status = cmd("status")
-    playlist = cmd("playlistinfo")
+    tracks = cmd("playlistinfo")
     
-    PlaylistParser.parse(status, playlist)
+    PlaylistParser.parse(status, tracks)
   end
 
   def respond_to?(method)
