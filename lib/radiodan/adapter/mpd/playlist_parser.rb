@@ -14,16 +14,16 @@ module PlaylistParser
   def self.parse_attributes(attributes)
     options = {}
     
-    return options if attributes.value.nil?
-    
-    options[:state]     = attributes['state'].to_sym
-    options[:mode]      = parse_mode(attributes)
-    options[:repeat]    = attributes['repeat'] == '1'
-    options[:position]  = attributes['song'].to_i
-    options[:seek]      = attributes['elapsed'].to_f
-    options[:volume]    = attributes['volume'].to_i
-    
-    options
+    begin
+      options[:state]     = attributes['state'].to_sym
+      options[:mode]      = parse_mode(attributes)
+      options[:repeat]    = attributes['repeat'] == '1'
+      options[:position]  = attributes['song'].to_i
+      options[:seek]      = attributes['elapsed'].to_f
+      options[:volume]    = attributes['volume'].to_i
+    ensure
+      return options
+    end
   end
   
   def self.parse_tracks(tracks)
