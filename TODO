@@ -4,6 +4,8 @@
 * Search for music in library, return playlist / array of tracks
 * MPD Adapter
   - Figure out a way of testing interface with playlist object
+* MPD::Response
+  - Add tests
 * Panic Mode
   - Add tests
 * Replace event_binding with EM::Channel?
