@@ -42,8 +42,8 @@ class MPD
     clear
     
     # set random & repeat
-    cmd(%Q{random #{parse_boolean(playlist.random?)}})
-    cmd(%Q{repeat #{parse_boolean(playlist.repeat?)}})
+    cmd(%Q{random #{boolean_to_s(playlist.random?)}})
+    cmd(%Q{repeat #{boolean_to_s(playlist.repeat?)}})
     
     # set volume
     cmd(%Q{setvol #{playlist.volume}})
@@ -90,7 +90,7 @@ class MPD
   end
   
   private
-  def parse_boolean(bool)
+  def boolean_to_s(bool)
     bool == true ? '1' : '0'
   end
 end
