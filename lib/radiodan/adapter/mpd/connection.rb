@@ -15,6 +15,7 @@ class Connection
   
   def cmd(command, options={})
     options = {match: /^(OK|ACK)/}.merge(options)
+    response = false
     
     connect do |c|
       begin
