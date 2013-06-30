@@ -27,12 +27,15 @@ class Panic
     
     original_state = @player.playlist
   
-    Thread.new do
-      logger.debug "panic for #{@timeout} seconds"
-      @player.playlist = @playlist
-      sleep(@timeout)
-      return_to_state original_state
-    end
+    EM.defer \
+      proc {
+        logger.debug "panic for #{@timeout} seconds"
+        @player.playlist = @playlist
+        sleep(@timeout)
+      }, 
+      proc {
+        return_to_state original_state
+      }
   
     @panic
   end
