@@ -40,9 +40,17 @@ class MPD
   def playlist=(playlist)
     # get rid of current playlist, stop playback
     clear
+    
+    # set random & repeat
+    cmd(%Q{random #{parse_boolean(playlist.random?)}})
+    cmd(%Q{repeat #{parse_boolean(playlist.repeat?)}})
+    
+    # set volume
+    cmd(%Q{setvol #{playlist.volume}})
 
     if enqueue playlist
       play playlist.position
+      # set for seek position
     else
       raise "Cannot load playlist #{playlist}" 
     end
@@ -73,13 +81,17 @@ class MPD
     end
   end
   
-  private
   def method_missing(method, *args, &block)
     if COMMANDS.include?(method.to_s)
       cmd(method.to_s, *args, &block)
     else
       super
     end
+  end
+  
+  private
+  def parse_boolean(bool)
+    bool == true ? '1' : '0'
   end
 end
 end

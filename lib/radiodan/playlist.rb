@@ -29,6 +29,7 @@ class Playlist
   STATES = [:play, :stop, :pause]
   MODES  = [:sequential, :resume, :random]
   attr_reader :state, :mode, :repeat, :tracks, :position, :seek, :volume
+  alias_method :repeat?, :repeat
   def_delegators :@tracks, :size
 
   def initialize(options={})
@@ -43,6 +44,10 @@ class Playlist
 
   def current
     tracks[position]
+  end
+  
+  def random?
+    mode == :random
   end
 
   def state=(new_state)
