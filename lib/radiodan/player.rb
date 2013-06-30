@@ -29,6 +29,10 @@ class Player
     @playlist
   end
   
+  def state
+    adapter.playlist
+  end
+  
 =begin
   Sync checks the current status of the player.
   Is it paused? Playing? What is it playing?
@@ -41,24 +45,24 @@ class Player
     current  = adapter.playlist
     expected = playlist
 
-    state = Radiodan::PlaylistSync.new expected, current
+    sync = Radiodan::PlaylistSync.new expected, current
 
-    if state.sync?
+    if sync.sync?
       true
     else
       # playback state
-      if state.errors.include? :state
+      if sync.errors.include? :state
         logger.debug "Expected: #{expected.state} Got: #{current.state}"
         trigger_event :play_state, expected.state
       end
       
-      if state.errors.include? :mode
+      if sync.errors.include? :mode
         logger.debug "Expected: #{expected.mode} Got: #{current.mode}"
         trigger_event :play_mode, expected.mode
       end
       
       # playlist
-      if state.errors.include? :playlist
+      if sync.errors.include? :playlist
         logger.debug "Expected: #{expected.current} Got: #{current.current}"
         trigger_event :playlist, expected
       end

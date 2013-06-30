@@ -13,6 +13,9 @@ module PlaylistParser
   private
   def self.parse_attributes(attributes)
     options = {}
+    
+    return options if attributes.value.nil?
+    
     options[:state]     = attributes['state'].to_sym
     options[:mode]      = parse_mode(attributes)
     options[:repeat]    = attributes['repeat'] == '1'
