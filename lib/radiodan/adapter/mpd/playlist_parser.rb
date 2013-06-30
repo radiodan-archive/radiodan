@@ -24,7 +24,7 @@ module PlaylistParser
   end
   
   def self.parse_tracks(tracks)
-    tracks.collect{ |t| Track.new(t) }
+    tracks.collect{ |t| Track.new(t) } rescue []
   end
 
   def self.parse_mode(attributes)
