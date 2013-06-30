@@ -1,22 +1,28 @@
+require 'logging'
 require_relative 'ack'
 
-class Radiodan::MPD
+class Radiodan
+  class MPD
   class Response
+    class AckError < Exception; end
+    include Logging
     attr_accessor :value, :string
     alias_method  :to_s, :string
     
     MULTILINE_COMMANDS = %w{playlistinfo}
     
     def initialize(response_string, command=nil)
-      @string = response_string
+      @string  = response_string
       @command = command
+      @value   = parse(@string, @command)
+      
+      if ack?
+        logger.error "ACK #{@command}, #{@value.inspect}"
+        raise Response::AckError, @value.description
+      end
     end
     
-    def value
-      @value ||= parse(@string, @command)
-    end
-    
-    def is_ack?
+    def ack?
       value.is_a?(Ack)
     end
     
@@ -44,7 +50,7 @@ class Radiodan::MPD
       when response == 'OK'
         true
       when response =~ /^ACK/
-        parse_ack(response)
+        Ack.new(response)
       when response.split.size == 1
         # set value -> value
         Hash[*(response.split.*2)]
@@ -55,13 +61,6 @@ class Radiodan::MPD
         split = split_response(response).flatten
         Hash[*split]
       end
-    end
-    
-    def parse_ack(response)
-      ack = Ack.new(response)
-      logger.warn ack
-    
-      ack
     end
     
     def parse_multiline(response)
@@ -96,4 +95,5 @@ class Radiodan::MPD
       end
     end
   end
+end
 end

@@ -1,11 +1,11 @@
 class Radiodan::MPD
   class Ack
     FORMAT = /ACK \[(\d)+@(\d)+\] \{(.*)\} (.*)/
-    attr_accessor :error_id, :position, :command, :description
+    attr_reader :error_id, :position, :command, :description
     
-    def intialize
+    def initialize(ack)
       matches = FORMAT.match(ack)
-      error_id, position, command, description = *matches[1..-1].join
+      @error_id, @position, @command, @description = *matches[1..-1]
     end
   end
 end
