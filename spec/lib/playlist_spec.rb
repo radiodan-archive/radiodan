@@ -138,7 +138,7 @@ describe Radiodan::Playlist do
       subject.volume.should == 24
     end
     
-    it 'has a legal range of 0-100' do
+    it 'has a legal range of -1-100' do
       expect { subject.volume = '999' }.to raise_error subject.class::VolumeError
       expect { subject.volume = -29 }.to raise_error subject.class::VolumeError
       subject.volume.should == 100

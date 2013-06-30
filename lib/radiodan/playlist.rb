@@ -98,12 +98,13 @@ class Playlist
   end
   
   def volume=(new_volume)
+    # -1 is allowed when volume cannot be determined
     begin
       new_volume = Integer(new_volume)
       
-      raise ArgumentError if new_volume > 100 || new_volume < 0
+      raise ArgumentError if new_volume > 100 || new_volume < -1
     rescue ArgumentError
-      raise VolumeError, "#{new_volume} not an integer 0-100"
+      raise VolumeError, "#{new_volume} not an integer -1-100"
     end
     
     @volume = new_volume
