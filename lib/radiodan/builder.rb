@@ -46,7 +46,7 @@ class Builder
       klass_path ||= false
       raise if klass_path
       
-      # attempt to require from middleware
+      # attempt to require from given path
       klass_path = Pathname.new(File.join(File.dirname(__FILE__), klass_type, "#{klass.underscore}.rb"))
       require klass_path if klass_path.exist?
 
