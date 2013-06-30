@@ -1,13 +1,16 @@
+require 'forwardable'
 require 'logging'
 require 'event_binding'
 require 'playlist_sync'
 
 class Radiodan
 class Player
+  extend Forwardable
   include Logging
   include EventBinding
   
   attr_reader :adapter, :playlist
+  def_delegators :adapter, :stop
   
   def adapter=(adapter)
     @adapter = adapter
