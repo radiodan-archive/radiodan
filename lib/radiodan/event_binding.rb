@@ -17,7 +17,7 @@ module EventBinding
     end
     
     bindings.each do |blk|
-      blk.call(data)
+      EM.next_tick { blk.call(data) }
     end
   end
   

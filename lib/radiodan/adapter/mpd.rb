@@ -33,7 +33,7 @@ class MPD
     
     # register new playlist events
     @player.register_event :playlist do |playlist|
-      EM.next_tick { self.playlist = playlist }
+      self.playlist = playlist
     end
   end
 
