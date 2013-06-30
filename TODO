@@ -2,9 +2,11 @@
   - #sync determines which events to trigger under which circumstances
   - Set random / repeat flags in MPD
   - Resume playlists from last position / seek point
+  - Set volume
 * Search for music in library, return playlist / array of tracks
 * MPD Adapter
   - Figure out a way of testing interface with playlist object
 * Panic Mode
   - Add tests
+* Replace event_binding with EM::Channel?
 * Remove eventmachine?
