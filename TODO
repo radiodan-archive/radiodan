@@ -1,10 +1,8 @@
 * Player
-  - explicitly set playlist when a new event is triggered, don't attempt to sync
-  - #sync reads playlist_sync methods
-    + #errors to determine which events to trigger
-    + Know when to restart playlists that repeat
-    + Resume playlists from last position
-* Search for music in library, returns playlist / array of tracks
+  - #sync determines which events to trigger under which circumstances
+  - Set random / repeat flags in MPD
+  - Resume playlists from last position / seek point
+* Search for music in library, return playlist / array of tracks
 * MPD Adapter
   - Figure out a way of testing interface with playlist object
 * Panic Mode
