@@ -49,8 +49,8 @@ class MPD
     cmd(%Q{setvol #{playlist.volume}})
 
     if enqueue playlist
-      play playlist.position
-      # set for seek position
+      # set for seek position (will play from seek point)
+      cmd(%Q{seek #{playlist.position} #{Integer(playlist.seek)}})
     else
       raise "Cannot load playlist #{playlist}" 
     end
@@ -70,7 +70,9 @@ class MPD
     status = cmd("status")
     tracks = cmd("playlistinfo")
     
-    PlaylistParser.parse(status, tracks)
+    playlist = PlaylistParser.parse(status, tracks)
+    p playlist
+    playlist
   end
 
   def respond_to?(method)
