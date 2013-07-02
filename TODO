@@ -1,6 +1,6 @@
+* Replace my crappy MPD adapter for https://github.com/archSeer/ruby-mpd
 * Player
   - #sync determines which events to trigger under which circumstances
-  - Resume playlists from last position / seek point
 * Search for music in library, return playlist / array of tracks
 * MPD Adapter
   - Figure out a way of testing interface with playlist object
