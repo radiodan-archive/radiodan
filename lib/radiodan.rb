@@ -19,6 +19,8 @@ class Radiodan
     # keep player running on schedule
     raise "no player set" unless player.adapter?
     
+    stop_player_on_exit
+    
     EM.synchrony do
       trap_signals!
       
@@ -55,17 +57,15 @@ class Radiodan
     end
   end
   
+  def stop_player_on_exit
+    at_exit { stop }
+  end
+  
   def trap_signals!
     %w{INT TERM SIGHUP SIGINT SIGTERM}.each do |signal|
       Signal.trap(signal) do
         logger.info "Trapped #{signal}"
-        EM::Synchrony.next_tick do
-          begin
-            stop
-          ensure
-            EM.stop
-          end
-        end
+        EM.stop
       end
     end
   end
