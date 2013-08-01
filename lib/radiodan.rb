@@ -58,7 +58,10 @@ class Radiodan
   end
   
   def stop_player_on_exit
-    at_exit { stop }
+    at_exit do
+      logger.info 'Stopping player'
+      stop
+    end
   end
   
   def trap_signals!
