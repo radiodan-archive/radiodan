@@ -1,4 +1,4 @@
-* Replace my crappy MPD adapter for https://github.com/archSeer/ruby-mpd
+* Replace my crappy MPD adapter for https://github.com/archSeer/ruby-mpd 
 * Player
   - #sync determines which events to trigger under which circumstances
 * Search for music in library, return playlist / array of tracks
@@ -8,5 +8,6 @@
   - Add tests
 * Panic Mode
   - Add tests
-* Replace event_binding with EM::Channel?
-* Remove eventmachine?
+* Event binding
+  - Replace event_binding with EM::Channel?
+  - Add a :all event, call block every time any event is triggered.
