@@ -11,6 +11,7 @@ class MPD
   def_delegators :@connection, :cmd
 
   COMMANDS = %w{stop pause clear play next previous search update}  
+  SEARCH_SCOPE = %w{artist album title track name genre date composer performer comment disc filename any}
   attr_reader :player
 
   def initialize(options={})
@@ -20,7 +21,7 @@ class MPD
   def player=(player)
     @player = player
     
-    # register typical player commands
+    # register available player commands
     COMMANDS.each do |command|
       @player.register_event command do |data|
         if data
@@ -83,7 +84,6 @@ class MPD
   # search :artist => "Bob Marley", :exact => true
   # search :filename => './bob.mp3'
   # search "Bob Marley"
-  SCOPE = %w{artist album title track name genre date composer performer comment disc filename any}
   def search(args)
     raise 'no query found' if args.nil?
     if args.to_s == args
@@ -103,7 +103,7 @@ class MPD
     scope = args.keys.first.to_s
     term  = args.values.first
     
-    unless SCOPE.include?(scope)
+    unless SEARCH_SCOPE.include?(scope)
       raise "Unknown search scope #{scope}"
     end
     
