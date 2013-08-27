@@ -33,7 +33,7 @@ class Builder
   end
   
   def call_middleware!
-    middleware.each{ |m| EM::Synchrony.next_tick { m.call(@player) } }
+    middleware.each{ |m| m.call(@player) }
   end
 
   private

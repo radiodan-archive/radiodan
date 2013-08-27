@@ -23,7 +23,7 @@ class Radiodan
     
     EM.synchrony do
       trap_signals!
-      @builder.call_middleware!
+      EventMachine::Synchrony.next_tick { @builder.call_middleware! }
       
       EM::Synchrony.add_periodic_timer(1) do
         logger.info "SYNC!"
