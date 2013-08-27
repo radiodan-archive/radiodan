@@ -8,12 +8,14 @@ class Track
   attr_reader :attributes
   def_delegators :@attributes, :[]
   
+  
   alias_method :eql?, :==
   
   def initialize(attributes={})
     @attributes = HashWithIndifferentAccess.new(attributes)
-    raise NoFileError, 'No file given for track' \
-      unless @attributes.include?(:file)
+    unless @attributes.has_key?(:file)
+      raise NoFileError, 'No file given for track'
+    end
   end
   
   def ==(other)

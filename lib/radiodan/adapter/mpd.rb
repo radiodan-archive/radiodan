@@ -72,13 +72,7 @@ class MPD
     tracks = cmd('playlistinfo')
     
     playlist = PlaylistParser.parse(status, tracks)
-    # p playlist
     playlist
-  end
-  
-  # updates music database
-  def update
-    cmd('update')
   end
   
   # search :artist => "Bob Marley", :exact => true
@@ -111,10 +105,10 @@ class MPD
         
     tracks = cmd(cmd_string)
 
-    if tracks.nil? || tracks == true
+    if tracks == true
       []
     else
-      tracks.collect{ |t| Track.new(t) }
+      tracks.collect { |t| Track.new(t) }
     end
   end
 

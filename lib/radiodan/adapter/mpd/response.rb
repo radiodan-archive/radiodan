@@ -72,11 +72,11 @@ class Radiodan
       values = {}
       
       split_response(response) do |key, value|
-        if values.include?(key)
+        if key == 'file' && values.has_key?('file')
           multiline << values
           values = {}
         end
-        
+                
         values[key] = value
       end
       
@@ -85,10 +85,11 @@ class Radiodan
     
     def split_response(response)
       response = response.split("\n")
-      # remove first response: "OK"
-      response.pop
       
       response.collect do |r| 
+        # remove "OK" responses
+        next if r == 'OK'
+        
         split = r.split(':')
         key   = split.shift.strip
         value = split.join(':').strip
@@ -96,7 +97,7 @@ class Radiodan
         yield(key, value) if block_given?
         
         [key, value]
-      end
+      end.compact
     end
   end
 end
