@@ -16,6 +16,9 @@ module EventBinding
       logger.error "Event #{event} triggered but not found" 
     end
     
+    # also, run the events bound to :all, no matter the event
+    bindings += event_bindings[:all]
+    
     bindings.each do |blk|
       EM::Synchrony.next_tick { blk.call(data) }
     end
