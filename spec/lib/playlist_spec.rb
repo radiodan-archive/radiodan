@@ -71,6 +71,17 @@ describe Radiodan::Playlist do
     end
   end
 
+  describe 'random mode' do
+    it 'is off by default' do
+      subject.random?.should == false
+    end
+    
+    it 'can be set' do
+      subject.mode = :random
+      subject.random?.should == true
+    end
+  end
+
   describe 'tracks' do
     it 'creates an array of tracks' do
       subject.tracks = 'x.mp3'
