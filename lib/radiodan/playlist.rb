@@ -47,7 +47,7 @@ class Playlist
   end
   
   def random?
-    mode == :random
+    self.mode == :random
   end
 
   def state=(new_state)
