@@ -9,13 +9,13 @@ class Radiodan
     attr_accessor :value, :string
     alias_method  :to_s, :string
     
-    MULTILINE_COMMANDS = %w{playlistinfo}
+    MULTILINE_COMMANDS = %w{playlistinfo search find}
     
     def initialize(response_string, command=nil)
       @string  = response_string
       @command = command
       @value   = parse(@string, @command)
-      
+            
       if ack?
         logger.error "ACK #{@command}, #{@value.inspect}"
         raise Response::AckError, @value.description
@@ -24,6 +24,10 @@ class Radiodan
     
     def ack?
       value.is_a?(Ack)
+    end
+    
+    def ==(other)
+      self.value == other
     end
     
     def method_missing(method, *args, &block)
@@ -54,7 +58,7 @@ class Radiodan
       when response.split.size == 1
         # set value -> value
         Hash[*(response.split.*2)]
-      when MULTILINE_COMMANDS.include?(command)
+      when MULTILINE_COMMANDS.include?(command.split.first)
         # create array of hash values
         parse_multiline(response)
       else

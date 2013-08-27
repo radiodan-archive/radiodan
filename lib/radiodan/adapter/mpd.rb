@@ -10,7 +10,7 @@ class MPD
   
   def_delegators :@connection, :cmd
 
-  COMMANDS = %w{stop pause clear play next previous}  
+  COMMANDS = %w{stop pause clear play next previous search update}  
   attr_reader :player
 
   def initialize(options={})
@@ -67,12 +67,55 @@ class MPD
   end
   
   def playlist
-    status = cmd("status")
-    tracks = cmd("playlistinfo")
+    status = cmd('status')
+    tracks = cmd('playlistinfo')
     
     playlist = PlaylistParser.parse(status, tracks)
-    p playlist
+    # p playlist
     playlist
+  end
+  
+  # updates music database
+  def update
+    cmd('update')
+  end
+  
+  # search :artist => "Bob Marley", :exact => true
+  # search :filename => './bob.mp3'
+  # search "Bob Marley"
+  SCOPE = %w{artist album title track name genre date composer performer comment disc filename any}
+  def search(args)
+    raise 'no query found' if args.nil?
+    if args.to_s == args
+      args = {'any' => args}
+    end
+    
+    if args.delete(:exact)
+      command = 'find'
+    else
+      command = 'search'
+    end
+    
+    if args.keys.size > 1
+      raise 'Too many arguments for search'
+    end
+    
+    scope = args.keys.first.to_s
+    term  = args.values.first
+    
+    unless SCOPE.include?(scope)
+      raise "Unknown search scope #{scope}"
+    end
+    
+    cmd_string = %Q{#{command} #{scope} "#{term}"}
+        
+    tracks = cmd(cmd_string)
+
+    if tracks.nil? || tracks == true
+      []
+    else
+      tracks.collect{ |t| Track.new(t) }
+    end
   end
 
   def respond_to?(method)
