@@ -1,7 +1,7 @@
-* Replace my crappy MPD adapter for https://github.com/archSeer/ruby-mpd 
 * Player
   - #sync determines which events to trigger under which circumstances
-* Search for music in library, return playlist / array of tracks
+* Playlist
+  - Resume mode updates seek mode on syc
 * MPD Adapter
   - Figure out a way of testing interface with playlist object
 * MPD::Response

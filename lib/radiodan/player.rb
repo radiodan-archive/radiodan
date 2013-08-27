@@ -10,8 +10,7 @@ class Player
   include EventBinding
   
   attr_reader :adapter, :playlist
-  def_delegators :adapter, :stop
-  
+    
   def adapter=(adapter)
     @adapter = adapter
     @adapter.player = self
@@ -63,11 +62,29 @@ class Player
       
       # playlist
       if sync.errors.include? :playlist
-        logger.debug "Expected: #{expected.current} Got: #{current.current}"
+        logger.debug "Expected: #{expected.current.inspect} Got: #{current.current.inspect}"
         trigger_event :playlist, expected
       end
       
       false
+    end
+  end
+
+  def respond_to?(method)
+    if adapter.respond_to? method
+      true
+    else
+      super
+    end
+  end
+
+  private
+  
+  def method_missing(method, *args, &block)
+    if adapter.respond_to? method
+      adapter.send method, *args, &block
+    else
+      super
     end
   end
 end

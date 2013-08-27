@@ -25,7 +25,7 @@ class Builder
   end
   
   def playlist(new_playlist)
-    player.playlist = new_playlist if player
+    use :playlist_to_start, new_playlist
   end
   
   def log(log)
@@ -33,7 +33,7 @@ class Builder
   end
   
   def call_middleware!
-    middleware.each{ |m| m.call(@player) }
+    middleware.each{ |m| EM::Synchrony.next_tick { m.call(@player) } }
   end
 
   private

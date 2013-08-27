@@ -4,7 +4,8 @@ require 'active_support/core_ext/hash/indifferent_access'
 class Radiodan
 class Track
   class NoFileError < Exception; end
-  extend  Forwardable
+  extend Forwardable
+  attr_reader :attributes
   def_delegators :@attributes, :[]
   
   alias_method :eql?, :==

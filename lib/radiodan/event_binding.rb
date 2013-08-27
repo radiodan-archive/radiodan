@@ -17,7 +17,7 @@ module EventBinding
     end
     
     bindings.each do |blk|
-      EM.next_tick { blk.call(data) }
+      EM::Synchrony.next_tick { blk.call(data) }
     end
   end
   
