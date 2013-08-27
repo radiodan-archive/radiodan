@@ -105,10 +105,10 @@ class MPD
         
     tracks = cmd(cmd_string)
 
-    if tracks == true
-      []
-    else
+    if tracks.respond_to?(:collect)
       tracks.collect { |t| Track.new(t) }
+    else
+      []
     end
   end
 
