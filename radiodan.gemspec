@@ -25,7 +25,10 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'eventmachine',     EM_VERSION
   gem.add_dependency 'em-synchrony',     EM_VERSION
   gem.add_dependency 'em-http-request',  EM_VERSION
-  gem.add_dependency 'em-simple_telnet', '~> 0.0.6'
-  gem.add_dependency 'active_support',   '~> 3.0.0'
-  gem.add_dependency 'i18n',             '~> 0.6.4'
+  gem.add_dependency 'em-simple_telnet',  '~> 0.0.6'
+  gem.add_dependency 'active_support',    '~> 3.0.0'
+  gem.add_dependency 'i18n',              '~> 0.6.4'
+  gem.add_dependency 'thin',              '~> 1.5.1'
+  gem.add_dependency 'sinatra',           '~> 1.4.2'
+  gem.add_dependency 'sinatra-synchrony', '~> 0.4.1'
 end
