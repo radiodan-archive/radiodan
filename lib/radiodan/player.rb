@@ -23,8 +23,7 @@ class Player
   def playlist=(new_playlist)
     @playlist = new_playlist
     trigger_event(:playlist, @playlist)
-    # run sync to explicitly conform to new playlist?
-    
+    trigger_event(:player_state, adapter.playlist)
     @playlist
   end
   
@@ -36,7 +35,7 @@ class Player
   Sync checks the current status of the player.
   Is it paused? Playing? What is it playing?
   It compares the expected to actual statuses and
-  makes changes required to keep them the same.
+  triggers events if there is a difference.
 =end
   def sync
     return false unless adapter?
@@ -52,12 +51,12 @@ class Player
       # playback state
       if sync.errors.include? :state
         logger.debug "Expected: #{expected.state} Got: #{current.state}"
-        trigger_event :play_state, expected.state
+        trigger_event :play_state, current.state
       end
       
       if sync.errors.include? :mode
         logger.debug "Expected: #{expected.mode} Got: #{current.mode}"
-        trigger_event :play_mode, expected.mode
+        trigger_event :play_mode, current.mode
       end
       
       # playlist
