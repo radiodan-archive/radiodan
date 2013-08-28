@@ -27,7 +27,11 @@ module PlaylistParser
   end
   
   def self.parse_tracks(tracks)
-    tracks.collect{ |t| Track.new(t) }
+    if tracks.respond_to?(:collect)
+      tracks.collect{ |t| Track.new(t) }
+    else
+      []
+    end
   end
 
   def self.parse_mode(attributes)
