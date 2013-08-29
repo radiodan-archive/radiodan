@@ -15,7 +15,7 @@ class TouchFile
   end
 
   def call(player)
-    EM.now_and_every(0.5) do
+    EM::Synchrony.now_and_every(0.5) do
       player.events.each do |event|
         file = event.to_s
         p = Pathname.new(File.join(@path, file))
