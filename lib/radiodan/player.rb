@@ -23,7 +23,7 @@ class Player
   def playlist=(new_playlist)
     @playlist = new_playlist
     trigger_event(:playlist, @playlist)
-    # trigger_event(:player_state, player_state)
+    trigger_event(:player_state, @adapter.playlist)
     @playlist
   end
   

@@ -26,18 +26,12 @@ class Panic
     @panic = true
     
     original_state = @player.playlist
-  
-    EM.defer \
-      proc {
-        logger.debug "panic for #{@timeout} seconds"
-        @player.playlist = @playlist
-        sleep(@timeout)
-      }, 
-      proc {
-        return_to_state original_state
-      }
-  
-    @panic
+    logger.debug "panic for #{@timeout} seconds"
+    @player.playlist = @playlist
+    
+    EM::Synchrony.add_timer(@timeout) do
+      return_to_state original_state
+    end
   end
 
   def return_to_state(playlist)
