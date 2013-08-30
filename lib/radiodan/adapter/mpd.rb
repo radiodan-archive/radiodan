@@ -58,6 +58,8 @@ class MPD
   end
 
   def enqueue(tracks)
+    return false if tracks.empty?
+    
     tracks.each do |track|
       cmd(%Q{add "#{track[:file]}"})
     end
