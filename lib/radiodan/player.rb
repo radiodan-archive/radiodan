@@ -22,8 +22,10 @@ class Player
   
   def playlist=(new_playlist)
     @playlist = new_playlist
-    trigger_event(:playlist, @playlist)
-    trigger_event(:player_state, @adapter.playlist) if @adapter
+    
+    trigger_event(:playlist, @playlist)    
+    trigger_event(:player_state, adapter.playlist) if @adapter
+    
     @playlist
   end
   
@@ -46,6 +48,7 @@ class Player
     sync = Radiodan::PlaylistSync.new expected, current
 
     if sync.sync?
+      trigger_event :sync, current
       true
     else
       # playback state
