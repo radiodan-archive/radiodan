@@ -49,7 +49,11 @@ class Playlist
   def random?
     self.mode == :random
   end
-
+  
+  def state
+    empty? ? :stop : @state
+  end
+  
   def state=(new_state)
     state = new_state.to_sym
 

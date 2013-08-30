@@ -3,7 +3,12 @@ require 'playlist'
 
 describe Radiodan::Playlist do
   describe 'default attributes' do
-    it 'has a state of playing' do
+    it 'has a state of stop' do
+      subject.state.should == :stop
+    end
+    
+    it 'has a state of play if there are tracks' do
+      subject.tracks << mock
       subject.state.should == :play
     end
 
@@ -33,9 +38,22 @@ describe Radiodan::Playlist do
   end
 
   describe 'playback state' do
-    it 'can be set' do
-      subject.state = :play
-      subject.state.should == :play
+    it 'is always stop if playlist is empty' do
+      subject.empty?.should be_true
+
+      subject.state = :pause
+      subject.state.should == :stop
+      
+      subject.tracks << mock
+      
+      subject.empty?.should be_false
+      subject.state.should == :pause
+    end
+    
+    it 'can be set if tracks are present' do
+      subject.tracks << mock
+      subject.state = :pause
+      subject.state.should == :pause
     end
 
     it 'cannot be set to an unknown state' do

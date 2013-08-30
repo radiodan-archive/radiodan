@@ -4,7 +4,7 @@ require 'playlist'
 
 describe Radiodan::PlaylistSync do
   subject(:playlist_sync) do
-    playlist = Radiodan::Playlist.new
+    playlist = Radiodan::Playlist.new tracks: [mock]
     
     Radiodan::PlaylistSync.new \
       playlist,
