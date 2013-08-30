@@ -1,5 +1,9 @@
+require 'logging'
+
 class Radiodan
 class PlaylistSync
+  include Logging
+  
   class SyncError < Exception; end
   attr_accessor :expected, :current
   attr_reader   :errors
@@ -11,16 +15,21 @@ class PlaylistSync
   end
   
   def sync?
-    prerequisites_check
-    compare_playback_state & compare_playback_mode & compare_tracks
+    if ready?
+      compare_playback_state & compare_playback_mode & compare_tracks
+    end
+  end
+  
+  def ready?
+    if expected.nil? || current.nil?
+      logger.warn 'Require two playlists to compare'
+      false
+    else
+      true
+    end
   end
   
   private
-  def prerequisites_check
-    raise SyncError, 'No expected playlist to compare to' if expected.nil?
-    raise SyncError, 'No current playlist to compare to'  if current.nil?
-  end
-  
   def compare_playback_state
     # add rules about when this is ok to be out of sync
     # e.g. sequential expected runs out of tracks and stops

@@ -14,12 +14,12 @@ describe Radiodan::PlaylistSync do
   context 'prerequisites for sync' do
     it 'requires expected playlist' do
       playlist_sync.expected = nil
-      expect { playlist_sync.sync? }.to raise_error(Radiodan::PlaylistSync::SyncError)
+      playlist_sync.ready?.should == false
     end
     
     it 'requires current state' do
       playlist_sync.current = nil
-      expect { playlist_sync.sync? }.to raise_error(Radiodan::PlaylistSync::SyncError)
+      playlist_sync.ready?.should == false
     end
   end
   
