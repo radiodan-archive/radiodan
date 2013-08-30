@@ -118,5 +118,16 @@ class Playlist
     
     @volume = new_volume
   end
+  
+  def to_hash
+    { :state    => state,
+      :mode     => mode,
+      :repeat   => repeat,
+      :tracks   => begin tracks.collect(&:attributes) rescue []; end,
+      :position => position,
+      :seek     => seek,
+      :volume   => volume }
+  end
+  alias_method :as_json, :to_hash
 end
 end
