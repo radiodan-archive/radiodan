@@ -119,7 +119,7 @@ class Playlist
     @volume = new_volume
   end
   
-  def to_hash
+  def attributes
     { :state    => state,
       :mode     => mode,
       :repeat   => repeat,
@@ -128,6 +128,6 @@ class Playlist
       :seek     => seek,
       :volume   => volume }
   end
-  alias_method :as_json, :to_hash
+  alias_method :as_json, :attributes
 end
 end

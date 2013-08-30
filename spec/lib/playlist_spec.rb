@@ -174,16 +174,16 @@ describe Radiodan::Playlist do
     end
   end
   
-  describe 'as hash of values' do
+  describe 'attributes' do
     it 'should be well formed' do
       expected = {:state=>:stop, :mode=>:sequential, :repeat=>false, :tracks=>[], :position=>0, :seek=>0.0, :volume=>100}
-      expect subject.to_hash.should == expected
+      expect subject.attributes.should == expected
     end
     
     it 'should include track attributes' do
       subject.tracks << Radiodan::Track.new(:file => 'dan.mp3')
       expected = {:state=>:play, :mode=>:sequential, :repeat=>false, :tracks=>[{'file' => 'dan.mp3'}], :position=>0, :seek=>0.0, :volume=>100}
-      expect subject.to_hash.should == expected      
+      expect subject.attributes.should == expected      
     end
   end
 end
