@@ -10,6 +10,7 @@ module Logging
   
   def self.output=(output)
     @@output = output
+    STDOUT.sync = true if @@output == STDOUT
   end
   
   def self.output
