@@ -38,7 +38,7 @@ class MPD
     end
   end
 
-  def playlist=(playlist)
+  def playlist=(playlist)    
     # get rid of current playlist, stop playback
     clear
     
@@ -49,6 +49,11 @@ class MPD
     # set volume
     cmd(%Q{setvol #{playlist.volume}})
 
+    if playlist.empty?
+      logger.error 'Playlist empty, nothing to do'
+      return false
+    end
+
     if enqueue playlist.tracks
       # set for seek position (will play from seek point)
       cmd(%Q{seek #{playlist.position} #{Integer(playlist.seek)}})
@@ -58,8 +63,6 @@ class MPD
   end
 
   def enqueue(tracks)
-    return false if tracks.empty?
-    
     tracks.each do |track|
       cmd(%Q{add "#{track[:file]}"})
     end
