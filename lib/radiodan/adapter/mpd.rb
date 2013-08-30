@@ -38,7 +38,7 @@ class MPD
     end
   end
 
-  def playlist=(playlist)    
+  def playlist=(playlist)
     # get rid of current playlist, stop playback
     clear
     
@@ -84,7 +84,11 @@ class MPD
   # search :filename => './bob.mp3'
   # search "Bob Marley"
   def search(args)
-    raise 'no query found' if args.nil?
+    if args.nil?
+      logger.error 'no query found' 
+      return []
+    end
+    
     if args.to_s == args
       args = {'any' => args}
     end
