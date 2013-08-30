@@ -66,6 +66,7 @@ class Player
         when :add_tracks
           logger.debug "Found additional tracks to enqueue"
           trigger_event :enqueue, expected.tracks[current.tracks.size..-1]
+          trigger_event :play_pending if sync.errors.include?(:state) && current.state == :stop
         end
       end
       
