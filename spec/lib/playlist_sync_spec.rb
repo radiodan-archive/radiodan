@@ -1,11 +1,14 @@
 require 'spec_helper'
 require 'playlist_sync'
+require 'playlist'
 
 describe Radiodan::PlaylistSync do
   subject(:playlist_sync) do
+    playlist = Radiodan::Playlist.new
+    
     Radiodan::PlaylistSync.new \
-      stub(:state => nil, :mode => nil, :tracks => [], :size => 0),
-      stub(:state => nil, :mode => nil, :tracks => [], :size => 0)
+      playlist,
+      playlist.dup
   end
   
   context 'prerequisites for sync' do
@@ -23,18 +26,18 @@ describe Radiodan::PlaylistSync do
   context 'playback state' do
     before :each do
       playlist_sync.stub(:compare_playback_mode => true, :compare_playlist => true)
-      playlist_sync.expected.stub(:state => :playing)
+      playlist_sync.expected.state = :play
     end
     
     it 'catches non-matching state' do
-      playlist_sync.current.stub(:state => :paused)
+      playlist_sync.current.state = :pause
 
       playlist_sync.sync?.should  == false
       playlist_sync.errors.should == [:state]
     end
     
     it 'allows matching state' do
-      playlist_sync.current.stub(:state => :playing)
+      playlist_sync.current.state = :play
       playlist_sync.sync?.should == true
       playlist_sync.errors.should be_empty
     end
@@ -43,18 +46,18 @@ describe Radiodan::PlaylistSync do
   context 'playback mode' do
     before :each do
       playlist_sync.stub(:compare_playback_state => true, :compare_playlist => true)
-      playlist_sync.expected.stub(:mode => :random)
+      playlist_sync.expected.mode = :random
     end
     
     it 'catches non-matching state' do
-      playlist_sync.current.stub(:mode => :resume)
+      playlist_sync.current.mode = :resume
 
       playlist_sync.sync?.should  == false
       playlist_sync.errors.should == [:mode]
     end
     
     it 'allows matching state' do
-      playlist_sync.current.stub(:mode => :random)
+      playlist_sync.current.mode = :random
       playlist_sync.sync?.should == true
       playlist_sync.errors.should be_empty
     end
@@ -63,25 +66,32 @@ describe Radiodan::PlaylistSync do
   context 'playlists' do
     before :each do
       playlist_sync.stub(:compare_playback_mode => true, :compare_playback_state => true)
-      playlist_sync.expected.stub(:tracks => [1,2,3,4], :size => 4)
+      playlist_sync.expected.tracks = [1,2,3,4]
     end
     
     it 'catches non-matching tracks' do
-      playlist_sync.current.stub(:tracks => [], :size => 4)
+      playlist_sync.current.tracks = [5,6,7]
 
       playlist_sync.sync?.should  == false
-      playlist_sync.errors.should == [:playlist]
+      playlist_sync.errors.should == [:new_tracks]
     end
     
-    it 'catches non-matching size' do
-      playlist_sync.current.stub(:tracks => [1,2,3,4], :size => 2)
+    it 'catches tracks in new order' do
+      playlist_sync.current.tracks = [2,1]
 
       playlist_sync.sync?.should  == false
-      playlist_sync.errors.should == [:playlist]
+      playlist_sync.errors.should == [:new_tracks]
     end
     
+    it 'catches additional tracks' do
+      playlist_sync.current.tracks = [1,2]
+      
+      playlist_sync.sync?.should  == false
+      playlist_sync.errors.should == [:add_tracks]
+    end
+
     it 'allows matching state' do
-      playlist_sync.current.stub(:tracks => [1,2,3,4], :size => 4)
+      playlist_sync.current.tracks = [1,2,3,4]
       playlist_sync.sync?.should == true
       playlist_sync.errors.should be_empty
     end
@@ -89,9 +99,9 @@ describe Radiodan::PlaylistSync do
   
   context 'error messages' do
     it 'captures multiple errors' do
-      playlist_sync.expected.stub(:tracks => [1], :mode => :random, :size => 1)
+      playlist_sync.expected.tap{ |x| x.tracks = [1];  x.mode = :random }
       playlist_sync.sync?.should  == false
-      playlist_sync.errors.should == [:mode, :playlist]
+      playlist_sync.errors.should == [:mode, :new_tracks]
     end
   end
 end

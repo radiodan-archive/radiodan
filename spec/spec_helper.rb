@@ -1,5 +1,5 @@
 require 'rspec/autorun'
-$: << File.expand_path('../../lib/radiodan', __FILE__)
+$:.unshift File.expand_path('../../lib/radiodan', __FILE__)
 
 RSpec.configure do |config|
   #config.mock_with :mocha

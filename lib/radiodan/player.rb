@@ -23,7 +23,7 @@ class Player
   def playlist=(new_playlist)
     @playlist = new_playlist
     trigger_event(:playlist, @playlist)
-    trigger_event(:player_state, @adapter.playlist)
+    trigger_event(:player_state, @adapter.playlist) if @adapter
     @playlist
   end
   
@@ -49,20 +49,21 @@ class Player
       true
     else
       # playback state
-      if sync.errors.include? :state
-        logger.debug "Expected: #{expected.state} Got: #{current.state}"
-        trigger_event :play_state, current.state
-      end
-      
-      if sync.errors.include? :mode
-        logger.debug "Expected: #{expected.mode} Got: #{current.mode}"
-        trigger_event :play_mode, current.mode
-      end
-      
-      # playlist
-      if sync.errors.include? :playlist
-        logger.debug "Expected: #{expected.current.inspect} Got: #{current.current.inspect}"
-        trigger_event :playlist, expected
+      sync.errors.each do |e|
+        case e
+        when :state
+          logger.debug "Expected: #{expected.state} Got: #{current.state}"
+          trigger_event :play_state, current.state
+        when :mode
+          logger.debug "Expected: #{expected.mode} Got: #{current.mode}"
+          trigger_event :play_mode, current.mode
+        when :new_tracks
+          logger.debug "Expected: #{expected.current.inspect} Got: #{current.current.inspect}"
+          trigger_event :playlist, expected
+        when :add_tracks
+          logger.debug "Found additional tracks to enqueue"
+          trigger_event :enqueue, expected.tracks[current.tracks.size..-1]
+        end
       end
       
       false

@@ -7,10 +7,10 @@ describe Radiodan::Builder do
     Radiodan::Player.stub(:new).and_return(@player)
   end
 
-  it 'passes a playlist to the player' do
+  it 'passes a playlist to the correct middleware' do
     playlist = mock
-
-    @player.should_receive(:playlist=).with(playlist)
+    
+    Radiodan::Builder.any_instance.should_receive(:use).with(:playlist_to_start, playlist)
 
     builder = Radiodan::Builder.new do |b|
       b.playlist playlist

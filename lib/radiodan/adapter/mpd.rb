@@ -10,7 +10,7 @@ class MPD
   
   def_delegators :@connection, :cmd
 
-  COMMANDS = %w{stop pause clear play next previous search update}  
+  COMMANDS = %w{stop pause clear play next previous enqueue search update}  
   SEARCH_SCOPE = %w{artist album title track name genre date composer performer comment disc filename any}
   attr_reader :player
 
@@ -49,7 +49,7 @@ class MPD
     # set volume
     cmd(%Q{setvol #{playlist.volume}})
 
-    if enqueue playlist
+    if enqueue playlist.tracks
       # set for seek position (will play from seek point)
       cmd(%Q{seek #{playlist.position} #{Integer(playlist.seek)}})
     else
@@ -57,8 +57,8 @@ class MPD
     end
   end
 
-  def enqueue(playlist)
-    playlist.tracks.each do |track|
+  def enqueue(tracks)
+    tracks.each do |track|
       cmd(%Q{add "#{track[:file]}"})
     end
   end

@@ -30,7 +30,7 @@ class Playlist
   MODES  = [:sequential, :resume, :random]
   attr_reader :state, :mode, :repeat, :tracks, :position, :seek, :volume
   alias_method :repeat?, :repeat
-  def_delegators :@tracks, :size
+  def_delegators :@tracks, :size, :length, :empty?
 
   def initialize(options={})
     self.state    = options.fetch(:state, STATES.first)

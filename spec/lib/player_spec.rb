@@ -19,9 +19,12 @@ describe Radiodan::Player do
 
   context 'playlist' do
     it 'triggers a new playlist event' do
-      playlist = mock
+      playlist = stub
+      adapter  = mock(:player= => nil, :playlist => playlist)
 
+      subject.adapter = adapter
       subject.should_receive(:trigger_event).with(:playlist, playlist)
+      subject.should_receive(:trigger_event).with(:player_state, playlist)
       subject.playlist = playlist
     end
   end
@@ -43,14 +46,14 @@ describe Radiodan::Player do
       subject.sync.should == true
     end
     
-    context 'sync error triggers events' do
+    context 'sync error triggers events:' do
       before :each do
         Radiodan::PlaylistSync.any_instance.stub(:sync?).and_return(false)
       end
       
       it 'playback state' do
         Radiodan::PlaylistSync.any_instance.stub(:errors).and_return([:state])
-        subject.playlist.stub(:state => :playing)
+        subject.adapter.playlist.stub(:state => :playing)
       
         subject.should_receive(:trigger_event).with(:play_state, :playing)
         subject.sync.should == false
@@ -58,21 +61,21 @@ describe Radiodan::Player do
       
       it 'playback mode' do
         Radiodan::PlaylistSync.any_instance.stub(:errors).and_return([:mode])
-        subject.playlist.stub(:mode => :random)
+        subject.adapter.playlist.stub(:mode => :random)
       
         subject.should_receive(:trigger_event).with(:play_mode, :random)
         subject.sync.should == false
       end
       
       it 'playlist' do
-        Radiodan::PlaylistSync.any_instance.stub(:errors).and_return([:playlist])
+        Radiodan::PlaylistSync.any_instance.stub(:errors).and_return([:new_tracks])
         
         playlist_content = stub
         subject.playlist.stub(:content => playlist_content)
       
         subject.should_receive(:trigger_event).with(:playlist, subject.playlist)
         subject.sync.should == false
-      end      
+      end
     end
   end
 end
