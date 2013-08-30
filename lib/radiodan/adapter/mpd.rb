@@ -16,8 +16,10 @@ class MPD
 
   def initialize(options={})
     @connection = Connection.new(options)
+    @connection.cmd('clear')
+    @connection.cmd('update')
   end
-    
+  
   def player=(player)
     @player = player
     
