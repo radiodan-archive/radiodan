@@ -46,11 +46,9 @@ class Player
     expected = playlist
 
     sync = Radiodan::PlaylistSync.new expected, current
+    synced = sync.sync?
 
-    if sync.sync?
-      trigger_event :sync, current
-      true
-    else
+    unless synced
       # playback state
       sync.errors.each do |e|
         case e
@@ -69,9 +67,10 @@ class Player
           trigger_event :play_pending if sync.errors.include?(:state) && current.state == :stop
         end
       end
-      
-      false
     end
+    
+    trigger_event :sync, current
+    synced
   end
 
   def respond_to?(method)
