@@ -4,7 +4,6 @@ require_relative 'ack'
 class Radiodan
   class MPD
   class Response
-    class AckError < Exception; end
     include Logging
     attr_accessor :value, :string
     alias_method  :to_s, :string
@@ -18,7 +17,7 @@ class Radiodan
             
       if ack?
         logger.error "ACK #{@command}, #{@value.inspect}"
-        raise Response::AckError, @value.description
+        raise AckError, @value.description
       end
     end
     

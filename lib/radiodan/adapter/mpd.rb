@@ -5,6 +5,7 @@ require_relative './mpd/playlist_parser'
 
 class Radiodan
 class MPD
+  class AckError < Exception; end
   include Logging
   extend  Forwardable
   
@@ -51,7 +52,7 @@ class MPD
     # set volume
     begin
       cmd(%Q{setvol #{playlist.volume}})
-    rescue Response::AckError => e
+    rescue AckError => e
       logger.error e.msg
     end
 
