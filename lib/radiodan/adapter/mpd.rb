@@ -49,7 +49,11 @@ class MPD
     cmd(%Q{repeat #{boolean_to_s(playlist.repeat?)}})
     
     # set volume
-    cmd(%Q{setvol #{playlist.volume}})
+    begin
+      cmd(%Q{setvol #{playlist.volume}})
+    rescue Response::AckError => e
+      logger.error e.msg
+    end
 
     if playlist.empty?
       logger.error 'Playlist empty, nothing to do'
