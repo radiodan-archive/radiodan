@@ -24,7 +24,7 @@ class Player
     @playlist = new_playlist
     
     trigger_event(:playlist, @playlist)    
-    trigger_event(:player_state, adapter.playlist) if @adapter
+    trigger_event(:player_state, @adapter.playlist) if @adapter
     
     @playlist
   end
