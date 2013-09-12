@@ -75,7 +75,7 @@ class MPD
   end
   
   def volume=(new_volume)
-    cmd(%Q{setvol #{new_volume}})
+    cmd(%Q{setvol #{Integer(new_volume)}})
   end
 
   def enqueue(tracks)
