@@ -80,11 +80,20 @@ class MPD
   end
   
   def playlist
-    status = cmd('status')
-    tracks = cmd('playlistinfo')
+    begin
+      status = cmd('status')
+      tracks = cmd('playlistinfo')
     
-    playlist = PlaylistParser.parse(status, tracks)
-    playlist
+      playlist = PlaylistParser.parse(status, tracks)
+      playlist
+    rescue  Playlist::StateError,
+            Playlist::ModeError,
+            Playlist::PositionError,
+            Playlist::SeekError,
+            Playlist::VolumeError => e
+      logger.warn("Playlist parsing raised error: #{e}")
+      retry
+    end
   end
   
   # search :artist => "Bob Marley", :exact => true
