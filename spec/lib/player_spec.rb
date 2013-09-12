@@ -49,6 +49,7 @@ describe Radiodan::Player do
     context 'sync error triggers events:' do
       before :each do
         Radiodan::PlaylistSync.any_instance.stub(:sync?).and_return(false)
+        subject.should_receive(:trigger_event).with(:sync, subject.adapter.playlist)
       end
       
       it 'playback state' do
