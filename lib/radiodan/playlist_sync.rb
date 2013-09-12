@@ -16,7 +16,7 @@ class PlaylistSync
   
   def sync?
     if ready?
-      compare_playback_state & compare_playback_mode & compare_tracks
+      compare_playback_state & compare_playback_mode & compare_tracks & compare_volume
     end
   end
   
@@ -53,6 +53,12 @@ class PlaylistSync
     report(:new_tracks) do
       @expected.size != @current.size ||
       @expected.tracks != @current.tracks
+    end
+  end
+  
+  def compare_volume
+    report(:volume) do
+      @expected.volume != @current.volume
     end
   end
   

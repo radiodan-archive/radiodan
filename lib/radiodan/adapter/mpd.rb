@@ -39,6 +39,11 @@ class MPD
     @player.register_event :playlist do |playlist|
       self.playlist = playlist
     end
+    
+    # register volume changes
+    @player.register_event :volume do |volume|
+      self.volume = volume
+    end
   end
 
   def playlist=(playlist)
@@ -51,7 +56,7 @@ class MPD
     
     # set volume
     begin
-      cmd(%Q{setvol #{playlist.volume}})
+      volume = playlist.volume
     rescue AckError => e
       logger.error e.msg
     end
@@ -67,6 +72,10 @@ class MPD
     else
       raise "Cannot load playlist #{playlist}" 
     end
+  end
+  
+  def volume=(new_volume)
+    cmd(%Q{setvol #{new_volume}})
   end
 
   def enqueue(tracks)

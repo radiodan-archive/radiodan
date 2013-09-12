@@ -53,10 +53,10 @@ class Player
       sync.errors.each do |e|
         case e
         when :state
-          logger.debug "Expected: #{expected.state} Got: #{current.state}"
+          logger.debug "Expected State: #{expected.state} Got: #{current.state}"
           trigger_event :play_state, current.state
         when :mode
-          logger.debug "Expected: #{expected.mode} Got: #{current.mode}"
+          logger.debug "Expected Mode: #{expected.mode} Got: #{current.mode}"
           trigger_event :play_mode, current.mode
         when :new_tracks
           logger.debug "Expected: #{expected.current.inspect} Got: #{current.current.inspect}"
@@ -65,6 +65,9 @@ class Player
           logger.debug "Found additional tracks to enqueue"
           trigger_event :enqueue, expected.tracks[current.tracks.size..-1]
           trigger_event :play_pending if sync.errors.include?(:state) && current.state == :stop
+        when :volume
+          logger.debug "Expected Volume: #{expected.volume} Got: #{current.volume}"
+          trigger_event :volume, expected.volume
         end
       end
     end

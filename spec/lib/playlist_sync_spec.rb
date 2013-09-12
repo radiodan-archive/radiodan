@@ -63,6 +63,26 @@ describe Radiodan::PlaylistSync do
     end
   end
   
+  context 'volume' do
+    before :each do
+      playlist_sync.stub(:compare_playback_state => true, :compare_playlist => true, :compare_playback_mode => true)
+      playlist_sync.expected.volume = 90
+    end
+    
+    it 'catches non-matching state' do
+      playlist_sync.current.volume = 70
+
+      playlist_sync.sync?.should  == false
+      playlist_sync.errors.should == [:volume]
+    end
+    
+    it 'allows matching state' do
+      playlist_sync.current.volume = 90
+      playlist_sync.sync?.should == true
+      playlist_sync.errors.should be_empty
+    end
+  end
+  
   context 'playlists' do
     before :each do
       playlist_sync.stub(:compare_playback_mode => true, :compare_playback_state => true)
