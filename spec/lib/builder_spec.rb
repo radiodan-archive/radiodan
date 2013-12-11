@@ -9,7 +9,7 @@ describe Radiodan::Builder do
 
   it 'passes a playlist to the correct middleware' do
     playlist = mock
-    
+
     Radiodan::Builder.any_instance.should_receive(:use).with(:playlist_to_start, playlist)
 
     builder = Radiodan::Builder.new do |b|
@@ -30,6 +30,15 @@ describe Radiodan::Builder do
     end
   end
 
+  it 'sets a log output and level' do
+    builder = Radiodan::Builder.new do |b|
+      b.log '/dev/null', :fatal
+    end
+
+    Radiodan::Logging.level.should == Logger::FATAL
+    Radiodan::Logging.output.should == '/dev/null'
+  end
+
   describe 'middleware' do
     it 'creates an instance of middleware and stores internally' do
       class Radiodan::MockMiddle; end
@@ -40,7 +49,7 @@ describe Radiodan::Builder do
       builder = Radiodan::Builder.new do |b|
         b.use :mock_middle, options
       end
-      
+
       builder.middleware.size.should == 1
       builder.middleware.should include middleware
     end

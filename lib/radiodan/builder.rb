@@ -8,30 +8,31 @@ require 'player'
 class Radiodan
 class Builder
   attr_reader :middleware, :player
-    
+
   def initialize(&blk)
     @middleware = []
     @player = Player.new
-    
+
     yield(self) if block_given?
   end
 
   def use(klass, *config)
     @middleware << register(klass, 'middleware', *config)
   end
-  
+
   def adapter(klass, *config)
     player.adapter = register(klass, 'adapter', *config)
   end
-  
+
   def playlist(new_playlist)
     use :playlist_to_start, new_playlist
   end
-  
-  def log(log)
+
+  def log(log, level=:debug)
     Logging.output = log
+    Logging.level  = level
   end
-  
+
   def call_middleware!
     middleware.each{ |m| m.call(@player) }
   end
@@ -45,14 +46,14 @@ class Builder
     rescue NameError => e
       klass_path ||= false
       raise if klass_path
-      
+
       # attempt to require from given path
       klass_path = Pathname.new(File.join(File.dirname(__FILE__), klass_type, "#{klass.underscore}.rb"))
       require klass_path if klass_path.exist?
 
       retry
     end
-    
+
     if config.empty?
       radio_klass.new
     else
