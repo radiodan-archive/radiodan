@@ -28,9 +28,9 @@ class Builder
     use :playlist_to_start, new_playlist
   end
 
-  def log(log, level=:debug)
+  def log(log, level=nil)
     Logging.output = log
-    Logging.level  = level
+    Logging.level  = level unless level.nil?
   end
 
   def call_middleware!

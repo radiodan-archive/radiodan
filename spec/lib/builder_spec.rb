@@ -30,13 +30,25 @@ describe Radiodan::Builder do
     end
   end
 
-  it 'sets a log output and level' do
-    builder = Radiodan::Builder.new do |b|
-      b.log '/dev/null', :fatal
+  describe 'logger' do
+    it 'sets a log output and level' do
+      builder = Radiodan::Builder.new do |b|
+        b.log '/dev/null', :fatal
+      end
+
+      Radiodan::Logging.level.should == Logger::FATAL
+      Radiodan::Logging.output.should == '/dev/null'
     end
 
-    Radiodan::Logging.level.should == Logger::FATAL
-    Radiodan::Logging.output.should == '/dev/null'
+    it "has an optional log level" do
+      old_level = Radiodan::Logging.level
+
+      builder = Radiodan::Builder.new do |b|
+        b.log '/dev/null'
+      end
+
+      Radiodan::Logging.level.should == old_level
+    end
   end
 
   describe 'middleware' do
