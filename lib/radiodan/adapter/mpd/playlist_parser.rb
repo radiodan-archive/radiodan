@@ -6,8 +6,11 @@ module PlaylistParser
   def self.parse(attributes={}, tracks=[])
     options          = parse_attributes(attributes)
     options[:tracks] = parse_tracks(tracks)
-    
-    Playlist.new(options)
+    if(options[:tracks])
+      Playlist.new(options)
+    else
+      # don't create an empty playlist
+    end
   end
 
   private
@@ -30,7 +33,7 @@ module PlaylistParser
     if tracks.respond_to?(:collect)
       tracks.collect{ |t| Track.new(t) }
     else
-      []
+      # don't create an empty playlist
     end
   end
 
